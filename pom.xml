@@ -36,6 +36,7 @@
         <typesafe-config.version>1.4.2</typesafe-config.version>
         <typesafe.version>1.0.0</typesafe.version>
         <eclipse-collections.version>11.1.0</eclipse-collections.version>
+        <jgrapht.version>1.5.2</jgrapht.version>
 
         <!-- Maven -->
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
@@ -56,6 +57,12 @@
     </properties>
 
 	<dependencies>
+        <!-- JGraphT -->
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>${jgrapht.version}</version>
+        </dependency>
         <!-- Jackson FasterXML -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
