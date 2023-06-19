@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.engineersbox</groupId>
-    <artifactId>conduit</artifactId>
+    <artifactId>exmesh</artifactId>
     <version>0.1.0</version>
     <packaging>jar</packaging>
-    <name>Conduit</name>
+    <name>ExMesh</name>
 
     <repositories>
         <repository>
@@ -29,14 +29,9 @@
         <log4j2.version>2.17.2</log4j2.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-collections.version>4.4</commons-collections.version>
-        <asm.version>9.3</asm.version>
         <reflections.version>0.10.2</reflections.version>
-		<jsonpath.version>2.7.0</jsonpath.version>
 		<jackson.version>2.14.0</jackson.version>
-		<riemann-client.version>0.5.3</riemann-client.version>
         <guava.version>31.1-jre</guava.version>
-        <json-schema-validator.version>1.0.76</json-schema-validator.version>
-        <luaj.version>3.0.1</luaj.version>
         <bcel.version>6.7.0</bcel.version>
         <typesafe-config.version>1.4.2</typesafe-config.version>
         <typesafe.version>1.0.0</typesafe.version>
@@ -50,7 +45,7 @@
         <maven-shade.version>3.2.4</maven-shade.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 
-        <!-- Java 18 -->
+        <!-- Java 20 -->
         <java.version>20</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
@@ -61,29 +56,11 @@
     </properties>
 
 	<dependencies>
-        <!-- JSON Schema Validator -->
-        <dependency>
-            <groupId>com.networknt</groupId>
-            <artifactId>json-schema-validator</artifactId>
-            <version>${json-schema-validator.version}</version>
-        </dependency>
-		<!-- Riemann Client -->
-		<dependency>
-			<groupId>io.riemann</groupId>
-			<artifactId>riemann-java-client</artifactId>
-			<version>${riemann-client.version}</version>
-		</dependency>
         <!-- Jackson FasterXML -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
-        </dependency>
-        <!-- JsonPath -->
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <version>${jsonpath.version}</version>
         </dependency>
         <!-- Reflection Utils -->
         <dependency>
@@ -136,7 +113,6 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-
         <!-- Jupiter API for writing tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -149,12 +125,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
-        </dependency>
-        <!-- LuaJ -->
-        <dependency>
-            <groupId>org.luaj</groupId>
-            <artifactId>luaj-jse</artifactId>
-            <version>${luaj.version}</version>
         </dependency>
         <!-- Apache BCEL -->
         <dependency>
@@ -231,10 +201,10 @@
                 <artifactId>tscfg-maven-plugin</artifactId>
                 <version>${typesafe.version}</version>
                 <configuration>
-                    <templateFile>src/main/resources/templates/conduit_config_template.conf</templateFile>
-                    <packageName>com.engineersbox.conduit_v2.config</packageName>
+                    <templateFile>src/main/resources/templates/config_template.conf</templateFile>
+                    <packageName>com.engineersbox.exmesh.config</packageName>
                     <outputDirectory>src/main/java</outputDirectory>
-                    <className>ConduitConfig</className>
+                    <className>Config</className>
                     <generateGetters>false</generateGetters>
                     <useOptionals>true</useOptionals>
                     <useDurations>true</useDurations>
