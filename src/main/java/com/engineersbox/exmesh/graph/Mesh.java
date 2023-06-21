@@ -23,4 +23,5 @@ public class Mesh extends DirectedPseudograph<Task<?,?,?,?>, DefaultEdge> {
         }
         return super.addEdge(sourceVertex, targetVertex);
     }
+
 }

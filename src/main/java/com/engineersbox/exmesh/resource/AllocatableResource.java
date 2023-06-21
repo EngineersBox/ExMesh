@@ -5,7 +5,7 @@ import com.engineersbox.exmesh.execution.Task;
 
 import java.util.function.Function;
 
-public interface AllocatableResource extends Function<Task, ExecutionResult> {
+public interface AllocatableResource extends Function<Task<?,?,?,?>, ExecutionResult> {
 
     void configure();
 
