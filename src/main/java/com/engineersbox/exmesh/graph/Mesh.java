@@ -5,7 +5,7 @@ import org.jgrapht.graph.DirectedPseudograph;
 
 import java.util.function.Supplier;
 
-public class Mesh<E> extends DirectedPseudograph<Task<?,?,?,?>, E> {
+public class Mesh<E extends Pipe> extends DirectedPseudograph<Task<?,?,?,?>, E> {
 
     public Mesh(final Supplier<E> edgeSupplier,
                 final boolean weighted) {

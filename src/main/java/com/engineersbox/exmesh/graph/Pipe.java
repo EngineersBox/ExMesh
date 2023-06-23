@@ -1,5 +1,6 @@
 package com.engineersbox.exmesh.graph;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
 import java.util.Collection;
@@ -8,9 +9,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
+public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
 
-    private final ConcurrentLinkedQueue<T> queue;
+    private final ConcurrentLinkedQueue<Object> queue;
     private final int capacity;
     private final ReentrantLock lock;
 
@@ -21,7 +22,7 @@ public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
     }
 
     @Override
-    public synchronized boolean offer(final T t) {
+    public synchronized boolean offer(final Object t) {
         lock.lock();
         try {
             if (this.queue.size() >= capacity) {
@@ -49,7 +50,7 @@ public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
     }
 
     @Override
-    public Iterator<T> iterator() {
+    public Iterator<Object> iterator() {
         return this.queue.iterator();
     }
 
@@ -64,7 +65,7 @@ public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
     }
 
     @Override
-    public boolean add(final T t) {
+    public boolean add(final Object t) {
         return offer(t);
     }
 
@@ -74,22 +75,22 @@ public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
     }
 
     @Override
-    public boolean containsAll(final Collection<?> c) {
+    public boolean containsAll(@NonNull final Collection<?> c) {
         return this.queue.containsAll(c);
     }
 
     @Override
-    public boolean addAll(final Collection<? extends T> c) {
+    public boolean addAll(@NonNull final Collection<?> c) {
         return this.queue.addAll(c);
     }
 
     @Override
-    public boolean removeAll(final Collection<?> c) {
+    public boolean removeAll(@NonNull final Collection<?> c) {
         return this.queue.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(final Collection<?> c) {
+    public boolean retainAll(@NonNull final Collection<?> c) {
         return this.queue.retainAll(c);
     }
 
@@ -99,22 +100,22 @@ public class Pipe<T> extends DefaultWeightedEdge implements Queue<T> {
     }
 
     @Override
-    public T remove() {
+    public Object remove() {
         return this.queue.remove();
     }
 
     @Override
-    public T poll() {
+    public Object poll() {
         return this.queue.poll();
     }
 
     @Override
-    public T element() {
+    public Object element() {
         return this.queue.element();
     }
 
     @Override
-    public T peek() {
+    public Object peek() {
         return this.queue.peek();
     }
 
