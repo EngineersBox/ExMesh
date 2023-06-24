@@ -18,7 +18,7 @@ public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
     public Pipe(final int capacity) {
         this.queue = new ConcurrentLinkedQueue<>();
         this.capacity = capacity;
-        this.lock = new ReentrantLock();
+        this.lock = new ReentrantLock(true);
     }
 
     @Override

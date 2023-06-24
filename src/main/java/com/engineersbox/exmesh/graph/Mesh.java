@@ -1,16 +1,14 @@
 package com.engineersbox.exmesh.graph;
 
 import com.engineersbox.exmesh.execution.Task;
-import org.jgrapht.graph.DirectedMultigraph;
-import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 
 import java.util.function.Supplier;
 
-public class Mesh<E extends Pipe> extends DirectedMultigraph<Task<?,?,?,?>, E> {
+public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,?>, E> {
 
-    public Mesh(final Supplier<E> edgeSupplier,
-                final boolean weighted) {
-        super(null, edgeSupplier, weighted);
+    public Mesh(final Supplier<E> edgeSupplier) {
+        super(null, edgeSupplier);
     }
 
     @Override
