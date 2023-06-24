@@ -25,16 +25,16 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
 
     private final TypeToken<IS> inputSingleType;
     private final TypeToken<IC> inputCollectionType;
-    private final TypeToken<OS> outputSingleType;
     private final TypeToken<OC> outputCollectionType;
+    private final TypeToken<OS> outputSingleType;
     private Compatibility<IS> inputSingleCompat;
     private Compatibility<IC> inputCollectionCompat;
 
     {
         this.inputSingleType = new TypeToken<IS>(getClass()){};
         this.inputCollectionType = new TypeToken<IC>(getClass()){};
-        this.outputSingleType = new TypeToken<OS>(getClass()){};
         this.outputCollectionType = new TypeToken<OC>(getClass()){};
+        this.outputSingleType = new TypeToken<OS>(getClass()){};
         this.inputSingleCompat = new Compatibility.Default<>();
         this.inputCollectionCompat = new Compatibility.Default<>();
     }
