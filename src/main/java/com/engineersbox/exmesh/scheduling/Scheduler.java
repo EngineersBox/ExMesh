@@ -3,10 +3,13 @@ package com.engineersbox.exmesh.scheduling;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import org.jgrapht.traverse.TopologicalOrderIterator;
 
 public class Scheduler {
 
     private final Mesh<Pipe> mesh;
+    private final TopologicalOrderIterator<Task<?,?,?,?>, Pipe> meshIterator;
+
     private final ExecutionBehaviourDecisionUnit ebdu;
 
     public Scheduler(final Mesh<Pipe> mesh,
@@ -14,6 +17,7 @@ public class Scheduler {
                      final int containerCount,
                      final int stackSize) {
         this.mesh = mesh;
+        this.meshIterator = new TopologicalOrderIterator<>(mesh);
         this.ebdu = new ExecutionBehaviourDecisionUnit(nodeCount, containerCount, stackSize);
     }
 

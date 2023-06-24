@@ -1,11 +1,12 @@
 package com.engineersbox.exmesh.graph;
 
 import com.engineersbox.exmesh.execution.Task;
-import org.jgrapht.graph.DirectedPseudograph;
+import org.jgrapht.graph.DirectedMultigraph;
+import org.jgrapht.traverse.TopologicalOrderIterator;
 
 import java.util.function.Supplier;
 
-public class Mesh<E extends Pipe> extends DirectedPseudograph<Task<?,?,?,?>, E> {
+public class Mesh<E extends Pipe> extends DirectedMultigraph<Task<?,?,?,?>, E> {
 
     public Mesh(final Supplier<E> edgeSupplier,
                 final boolean weighted) {

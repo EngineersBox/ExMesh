@@ -2,11 +2,11 @@ package com.engineersbox.exmesh.scheduling;
 
 import com.engineersbox.exmesh.util.FixedSizeStack;
 import org.apache.commons.lang3.BitField;
-import org.eclipse.collections.api.multimap.Multimap;
 import org.eclipse.collections.api.multimap.set.MutableSetMultimap;
+import org.eclipse.collections.api.set.MutableSet;
+import org.eclipse.collections.impl.factory.Iterables;
 import org.eclipse.collections.impl.factory.Multimaps;
-
-import java.util.List;
+import org.eclipse.collections.impl.factory.Sets;
 
 public class ExecutionBehaviourDecisionUnit {
 
@@ -29,7 +29,7 @@ public class ExecutionBehaviourDecisionUnit {
     }
 
     public synchronized BitField issue(final Object nodeRef) {
-        // 1.
+        final MutableSet<CCAEntry> nodeEntries = this.nodeEntries.getIfAbsentPutAll(nodeRef, Sets.mutable.empty());
         return null;
     }
 
