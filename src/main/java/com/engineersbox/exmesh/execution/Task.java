@@ -50,13 +50,6 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
 
     protected Task(final double weight) {
         this.weight = weight;
-        LOGGER.error("Stufff");
-    }
-
-    private Type[] getTypeParameters() {
-        Class<?> clazz;
-        for (clazz = getClass(); !clazz.getSuperclass().equals(Task.class); clazz = clazz.getSuperclass());
-        return ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
     }
 
     /**
