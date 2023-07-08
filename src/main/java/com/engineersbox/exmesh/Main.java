@@ -9,7 +9,7 @@ import java.util.Map;
 public class Main {
 
     public static void main(String[] args) {
-        new Task<String, RichIterable<Integer>, Collection<Double>, Map<String, Float>>(2.4){
+        new Task<String, RichIterable<Integer>, Collection<Double>, Map<String, Float>>("Test Task", 2.4){
 
             @Override
             public Collection<Double> invoke(RichIterable<Integer> input) {

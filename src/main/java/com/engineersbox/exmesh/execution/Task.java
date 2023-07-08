@@ -37,6 +37,7 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     private final TypeToken<OS> outputSingleType;
     private Compatibility<IS> inputSingleCompat;
     private Compatibility<IC> inputCollectionCompat;
+    private final String name;
     private final double weight;
 
     {
@@ -48,7 +49,9 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
         this.inputCollectionCompat = new Compatibility.Default<>();
     }
 
-    protected Task(final double weight) {
+    protected Task(final String name,
+                   final double weight) {
+        this.name = name;
         this.weight = weight;
     }
 
@@ -93,6 +96,10 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
 
     public TypeToken<OC> getOutputCollectionType() {
         return this.outputCollectionType;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public double getWeight() {
