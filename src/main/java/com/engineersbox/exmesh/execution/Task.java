@@ -4,6 +4,11 @@ import com.engineersbox.exmesh.execution.type.Compatibility;
 import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
 import com.google.common.reflect.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * <p>
@@ -21,7 +26,10 @@ import com.google.common.reflect.TypeToken;
  * @param <OC> Output singleton type
  * @param <OS> Output collection type (comprised of one or more singletons)
  */
+@SuppressWarnings("unchecked")
 public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consolidatable<IS, IC> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
 
     private final TypeToken<IS> inputSingleType;
     private final TypeToken<IC> inputCollectionType;
@@ -42,6 +50,13 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
 
     protected Task(final double weight) {
         this.weight = weight;
+        LOGGER.error("Stufff");
+    }
+
+    private Type[] getTypeParameters() {
+        Class<?> clazz;
+        for (clazz = getClass(); !clazz.getSuperclass().equals(Task.class); clazz = clazz.getSuperclass());
+        return ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
     }
 
     /**
