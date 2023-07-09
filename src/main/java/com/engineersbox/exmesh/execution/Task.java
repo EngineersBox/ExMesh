@@ -3,12 +3,16 @@ package com.engineersbox.exmesh.execution;
 import com.engineersbox.exmesh.execution.type.Compatibility;
 import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
+import com.google.common.collect.Streams;
 import com.google.common.reflect.TypeToken;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -30,6 +34,12 @@ import java.lang.reflect.Type;
 public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consolidatable<IS, IC> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
+    private static final String[] GENERIC_TYPE_NAMES;
+    static {
+        GENERIC_TYPE_NAMES = Arrays.stream(Task.class.getTypeParameters())
+                .map(TypeVariable::getTypeName)
+                .toArray(String[]::new);
+    }
 
     private final TypeToken<IS> inputSingleType;
     private final TypeToken<IC> inputCollectionType;
@@ -53,6 +63,42 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
                    final double weight) {
         this.name = name;
         this.weight = weight;
+        checkImplementationConcrete();
+        LOGGER.trace(
+                "Created task {} | Weight {} | Input types [SINGLE: {}] [COLLECTION: {}] | Output types [SINGLE: {}] [COLLECTION: {}]",
+                name, weight,
+                this.inputSingleType,
+                this.inputCollectionType,
+                this.outputSingleType,
+                this.outputCollectionType
+        );
+    }
+
+    private void checkImplementationConcrete() {
+        Class<?> clazz;
+        for (clazz = getClass(); !clazz.getSuperclass().equals(Task.class); clazz = clazz.getSuperclass());
+        final Type[] types = ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments();
+        final Optional<Pair<Type, Type>> typeBound = Streams.zip(
+                        Arrays.stream(GENERIC_TYPE_NAMES),
+                        Arrays.stream(types),
+                        Pair::of
+                ).filter((final Pair<String, Type> names) -> names.getLeft().equals(names.getRight().getTypeName()))
+                .map((final Pair<String, Type> names) -> {
+                    final Type type = names.getRight();
+                    if (type instanceof TypeVariable<?> tv) {
+                        final AnnotatedType[] bounds = tv.getAnnotatedBounds();
+                        return Pair.of(type, bounds[0].getType());
+                    }
+                    return Pair.of(type, (Type) Object.class);
+                }).findFirst();
+        typeBound.ifPresent((final Pair<Type, Type> bound) -> {
+            throw new IllegalStateException(String.format(
+                    "Task implementation %s has unbounded generic parameter %s with upper bound of %s. Refactor this task to ensure generic parameter is not erased.",
+                    this.name,
+                    bound.getLeft(),
+                    bound.getRight()
+            ));
+        });
     }
 
     /**

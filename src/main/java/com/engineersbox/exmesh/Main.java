@@ -1,41 +1,192 @@
 package com.engineersbox.exmesh;
 
 import com.engineersbox.exmesh.execution.Task;
+import com.engineersbox.exmesh.graph.Mesh;
+import com.engineersbox.exmesh.graph.Pipe;
 import org.eclipse.collections.api.RichIterable;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
 
-    public static void main(String[] args) {
-        new Task<String, RichIterable<Integer>, Collection<Double>, Map<String, Float>>("Test Task", 2.4){
+    private static class TaskA extends Task<String, Void, List<Double>, Double> {
 
-            @Override
-            public Collection<Double> invoke(RichIterable<Integer> input) {
-                return null;
-            }
+        public TaskA() {
+            super("A", 1.0);
+        }
 
-            @Override
-            public RichIterable<Integer> consolidateSingle(String... values) {
-                return null;
-            }
+        @Override
+        public List<Double> invoke(Void input) {
+            return null;
+        }
 
-            @Override
-            public RichIterable<Integer> consolidateCollection(RichIterable<Integer>... collections) {
-                return null;
-            }
+        @Override
+        public Void consolidateSingle(String... values) {
+            return null;
+        }
 
-            @Override
-            public Map<String, Float> splitSingle() {
-                return null;
-            }
+        @Override
+        public Void consolidateCollection(Void... collections) {
+            return null;
+        }
 
-            @Override
-            public Collection<Double> splitCollection(int count) {
-                return null;
-            }
-        };
+        @Override
+        public Double splitSingle() {
+            return null;
+        }
+
+        @Override
+        public List<Double> splitCollection(int count) {
+            return null;
+        }
+    }
+
+    private static class TaskB extends Task<List<Double>, List<Double>, Iterable<Integer>, Integer> {
+
+        public TaskB() {
+            super("B", 1.0);
+        }
+
+        @Override
+        public Iterable<Integer> invoke(List<Double> input) {
+            return null;
+        }
+
+        @Override
+        public List<Double> consolidateSingle(List<Double>... values) {
+            return null;
+        }
+
+        @Override
+        public List<Double> consolidateCollection(List<Double>... collections) {
+            return null;
+        }
+
+        @Override
+        public Integer splitSingle() {
+            return null;
+        }
+
+        @Override
+        public Iterable<Integer> splitCollection(int count) {
+            return null;
+        }
+    }
+
+    private static class TaskC extends Task<Double, Iterable<Double>, Iterable<Integer>, Iterable<Integer>> {
+
+        public TaskC() {
+            super("C", 1.0);
+        }
+
+        @Override
+        public Iterable<Integer> invoke(Iterable<Double> input) {
+            return null;
+        }
+
+        @Override
+        public Iterable<Double> consolidateSingle(Double... values) {
+            return null;
+        }
+
+        @Override
+        public Iterable<Double> consolidateCollection(Iterable<Double>... collections) {
+            return null;
+        }
+
+        @Override
+        public Iterable<Integer> splitSingle() {
+            return null;
+        }
+
+        @Override
+        public Iterable<Integer> splitCollection(int count) {
+            return null;
+        }
+    }
+
+    private static class TaskD extends Task<Integer, Iterable<Integer>, Void, Void> {
+
+        public TaskD() {
+            super("D", 1.0);
+        }
+
+        @Override
+        public Void invoke(Iterable<Integer> input) {
+            return null;
+        }
+
+        @Override
+        public Iterable<Integer> consolidateSingle(Integer... values) {
+            return null;
+        }
+
+        @Override
+        public Iterable<Integer> consolidateCollection(Iterable<Integer>... collections) {
+            return null;
+        }
+
+        @Override
+        public Void splitSingle() {
+            return null;
+        }
+
+        @Override
+        public Void splitCollection(int count) {
+            return null;
+        }
+    }
+
+    private static final class TestTask<IS,IC,OC,OS> extends Task<IS,IC,OC,OS> {
+
+        public TestTask() {
+            super("E", 1.0);
+        }
+
+        @Override
+        public OC invoke(IC input) {
+            return null;
+        }
+
+        @Override
+        public IC consolidateSingle(IS... values) {
+            return null;
+        }
+
+        @Override
+        public IC consolidateCollection(IC... collections) {
+            return null;
+        }
+
+        @Override
+        public OS splitSingle() {
+            return null;
+        }
+
+        @Override
+        public OC splitCollection(int count) {
+            return null;
+        }
+    }
+
+    public static void main(final String[] args) {
+        final Mesh<Pipe> mesh = new Mesh<>(() -> new Pipe(5));
+        final TaskA A = new TaskA();
+        final TaskB B = new TaskB();
+        final TaskC C = new TaskC();
+        final TaskD D = new TaskD();
+//        final TestTask<String, Integer, Double, Float> E = new TestTask<>();
+        mesh.addVertex(A);
+        mesh.addVertex(B);
+        mesh.addVertex(C);
+        mesh.addVertex(D);
+//        mesh.addVertex(E);
+        mesh.addEdge(A, B);
+        mesh.addEdge(A, C);
+        mesh.addEdge(B, D);
+        mesh.addEdge(C, D);
     }
 
 }

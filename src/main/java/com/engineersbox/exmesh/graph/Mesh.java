@@ -16,10 +16,10 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                      final Task<?,?,?,?> targetVertex) {
         if (!targetVertex.accepts(sourceVertex)) {
             throw new IllegalStateException(String.format(
-                    "Cannot connect tasks with incompatible type bounds:\n\t[SINGLE | SINGLE] %s => %s\n\t[SINGLE | COLLECTION] %s => %s\n\t[COLLECTION | COLLECTION] %s => %s",
-                    sourceVertex.getOutputSingleType(), targetVertex.getInputSingleType(),
-                    sourceVertex.getOutputSingleType(), targetVertex.getOutputCollectionType(),
-                    sourceVertex.getOutputCollectionType(), targetVertex.getOutputCollectionType()
+                    "Cannot connect tasks [%s => %s] with incompatible type bounds:\n\tSource Vertex:\n\t\t[OUT SINGLE: %s]\n\t\t[OUT COLLECTION: %s]\n\tTarget Vertex\n\t\t[IN SINGLE: %s]\n\t\t[IN COLLECTION: %s]",
+                    sourceVertex.getName(), targetVertex.getName(),
+                    sourceVertex.getOutputSingleType().getType(), sourceVertex.getOutputCollectionType().getType(),
+                    targetVertex.getInputSingleType().getType(), targetVertex.getInputCollectionType().getType()
             ));
         }
         return super.addEdge(sourceVertex, targetVertex);
