@@ -3,6 +3,7 @@ package com.engineersbox.exmesh;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.scheduling.Scheduler;
 
 import java.util.List;
 
@@ -184,6 +185,13 @@ public class Main {
         mesh.addEdge(A, C);
         mesh.addEdge(B, D);
         mesh.addEdge(C, D);
+
+        final Scheduler scheduler = new Scheduler(
+                mesh,
+                4,
+                2,
+                10
+        );
     }
 
 }

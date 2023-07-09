@@ -5,16 +5,19 @@ import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
 import com.google.common.collect.Streams;
 import com.google.common.reflect.TypeToken;
-import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.*;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -85,8 +88,8 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
                 ).filter((final Pair<String, Type> names) -> names.getLeft().equals(names.getRight().getTypeName()))
                 .map((final Pair<String, Type> names) -> {
                     final Type type = names.getRight();
-                    if (type instanceof TypeVariable<?> tv) {
-                        final AnnotatedType[] bounds = tv.getAnnotatedBounds();
+                    if (type instanceof TypeVariable<?> typeVariable) {
+                        final AnnotatedType[] bounds = typeVariable.getAnnotatedBounds();
                         return Pair.of(type, bounds[0].getType());
                     }
                     return Pair.of(type, (Type) Object.class);
@@ -183,4 +186,8 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     @Override
     public abstract OC splitCollection(int count);
 
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.DEFAULT_STYLE);
+    }
 }

@@ -1,19 +1,16 @@
 package com.engineersbox.exmesh.scheduling;
 
-import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
-import org.jgrapht.alg.clustering.KSpanningTreeClustering;
-import org.jgrapht.traverse.TopologicalOrderIterator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Scheduler {
 
-    private static final int CLUSTER_COUNT = 10;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Scheduler.class);
+    private static final int CLUSTER_COUNT = 3;
 
     private final Mesh<Pipe> mesh;
-    private final TopologicalOrderIterator<Task<?,?,?,?>, Pipe> meshIterator;
-    private final KSpanningTreeClustering<Task<?,?,?,?>, Pipe> meshClustering;
-
     private final ExecutionBehaviourDecisionUnit ebdu;
 
     public Scheduler(final Mesh<Pipe> mesh,
@@ -23,8 +20,6 @@ public class Scheduler {
         // Grid has a single bitmask of size nodeCount
         // Each node has a bitmask of size containerCount
         this.mesh = mesh;
-        this.meshIterator = new TopologicalOrderIterator<>(mesh);
-        this.meshClustering = new KSpanningTreeClustering<>(mesh, CLUSTER_COUNT);
         this.ebdu = new ExecutionBehaviourDecisionUnit(nodeCount, containerCount, stackSize);
     }
 
