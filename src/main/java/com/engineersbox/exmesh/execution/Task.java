@@ -5,6 +5,8 @@ import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
 import com.google.common.collect.Streams;
 import com.google.common.reflect.TypeToken;
+import org.apache.commons.lang3.mutable.Mutable;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,19 +52,17 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     private final String name;
     private final double weight;
 
-    {
-        this.inputSingleType = new TypeToken<IS>(getClass()){};
-        this.inputCollectionType = new TypeToken<IC>(getClass()){};
-        this.outputCollectionType = new TypeToken<OC>(getClass()){};
-        this.outputSingleType = new TypeToken<OS>(getClass()){};
-        this.inputSingleCompat = new Compatibility.Default<>();
-        this.inputCollectionCompat = new Compatibility.Default<>();
-    }
-
     protected Task(final String name,
                    final double weight) {
         this.name = name;
         this.weight = weight;
+        this.inputSingleType = new TypeToken<IS>(getClass()){};
+        this.inputCollectionType = new TypeToken<IC>(getClass()){};
+        this.outputCollectionType = new TypeToken<OC>(getClass()){};
+        this.outputSingleType = new TypeToken<OS>(getClass()){};
+        final MutableInt failCount = new MutableInt();
+        this.inputSingleCompat = new Compatibility.Default<>(failCount, 4, true);
+        this.inputCollectionCompat = new Compatibility.Default<>(failCount, 4, true);
         checkImplementationConcrete();
         LOGGER.trace(
                 "Created task {} | Weight {} | Input types [SINGLE: {}] [COLLECTION: {}] | Output types [SINGLE: {}] [COLLECTION: {}]",
