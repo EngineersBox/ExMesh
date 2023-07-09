@@ -21,7 +21,7 @@ public interface Compatibility<T> {
 
         @Override
         public boolean check(final TypeToken<?> from, final TypeToken<T> to) {
-            return to.equals(from) || to.isSupertypeOf(from);
+            return to.equals(from) || to.isSupertypeOf(from) || from.isSubtypeOf(to);
         }
     }
 
