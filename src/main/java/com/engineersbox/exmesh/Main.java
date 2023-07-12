@@ -5,6 +5,7 @@ import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
 
+import java.util.Collection;
 import java.util.List;
 
 public class Main {
@@ -73,34 +74,34 @@ public class Main {
         }
     }
 
-    private static class TaskC extends Task<Double, Iterable<Double>, Iterable<Integer>, Iterable<Integer>> {
+    private static class TaskC extends Task<Double, Iterable<Double>, Collection<Integer>, Collection<Integer>> {
 
         public TaskC() {
             super("C", 1.0);
         }
 
         @Override
-        public Iterable<Integer> invoke(Iterable<Double> input) {
+        public Collection<Integer> invoke(Iterable<Double> input) {
             return null;
         }
 
         @Override
-        public Iterable<Double> consolidateSingle(Double... values) {
+        public Collection<Double> consolidateSingle(Double... values) {
             return null;
         }
 
         @Override
-        public Iterable<Double> consolidateCollection(Iterable<Double>... collections) {
+        public Collection<Double> consolidateCollection(Iterable<Double>... collections) {
             return null;
         }
 
         @Override
-        public Iterable<Integer> splitSingle() {
+        public Collection<Integer> splitSingle() {
             return null;
         }
 
         @Override
-        public Iterable<Integer> splitCollection(int count) {
+        public Collection<Integer> splitCollection(int count) {
             return null;
         }
     }

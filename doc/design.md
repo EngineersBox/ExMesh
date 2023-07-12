@@ -25,6 +25,20 @@ to be strongly-NP hard. and there exists no polynomial time approximation algori
 unless P = NP. However, the best approximation ratio achieved so far (by a polynomial time algorithm by Harren et al.) is
 (\frac{5}{3}+\varepsilon), imposing an open question whether there is an algorithm with approximation ratio $\frac{3}{2}$.
 
+### Pre-execution Pipelining
+
+A task that is waiting for one or more dependent tasks to complete, with results pushed into 
+deques in each edge (`Pipe`), can be allocated a thread in a pre-execution state (name TBC), which can 
+invoke the methods in the `Consolidatable` interface to collect results ahead of time to prevent waiting 
+for consolidation to happen at task start up. This can also apply to forwarding of results (`Splittable` interface)
+to the next tasks dependent on the current one, using inverse logic (??).
+
+Possibly allow for tasks to be marked as barriers or pipelined to determine if instead of pre-execution consolidation,
+the incoming batches from each connected pipe can be invoked in the task as soon as an allocatable resource is free.
+
+Allow for policies to be specified that determines how batches are pulled from connected pipes and in what order, this
+allows for customisation. Transparency to pipe object properties should be visible to this policy interface.
+
 ## References
 
 [Iteration Interleaving-Based SIMD Lane Partitioning](https://dl.acm.org/doi/pdf/10.1145/2847253)

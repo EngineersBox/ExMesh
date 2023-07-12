@@ -38,6 +38,12 @@ import java.util.Optional;
 @SuppressWarnings("unchecked")
 public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consolidatable<IS, IC> {
 
+    /* NOTE: A task that is waiting for one or more dependent tasks to complete, with results pushed into
+     * deques in each edge (Pipe), can be allocated a thread in a pre-execution state (name TBC), which can
+     * invoke the methods in the Consolidatable interface to collect results ahead of time to prevent waiting
+     * for consolidation to happen at task start up.
+     */
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
     private static final String GENERIC_TASK_IMPLEMENTATION_ERROR_TEMPLATE = """
         Task implementation %s has unbounded generic parameter %s with upper-bound of %s. Refactor this task to ensure generic parameter is not erased. For example:
