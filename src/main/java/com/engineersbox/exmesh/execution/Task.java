@@ -39,6 +39,20 @@ import java.util.Optional;
 public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consolidatable<IS, IC> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
+    private static final String GENERIC_TASK_IMPLEMENTATION_ERROR_TEMPLATE = """
+        Task implementation %s has unbounded generic parameter %s with upper-bound of %s. Refactor this task to ensure generic parameter is not erased. For example:
+        A concrete implementation instead of generic instantiation, instead of the following:
+        \tclass TestTask<IS,IC,OC,OS> extends Task<IS,IC,OC,OS> {...}
+        \tnew TestTask<A,B,C,D>(...);
+        Implement instead as follows:
+        \tclass TestTask extends Task<A,B,C,D> { /* generic overrides */ }
+        \tnew TestTask<>(...);
+        Or alternatively:
+        \tclass TestTask<IS,IC,OC,OS> extends Task<IS,IC,OC,OS> { /* concrete or forwarded generic overrides */ }
+        \tnew TestTask<A,B,C,D>(...){ /* generic overrides */ }'
+        Or potentially:
+        \tnew Task<A,B,C,D>(...){ /* generic overrides */ }
+    """;
     private static final String[] GENERIC_TYPE_NAMES;
     static {
         GENERIC_TYPE_NAMES = Arrays.stream(Task.class.getTypeParameters())
@@ -96,7 +110,7 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
                 }).findFirst();
         typeBound.ifPresent((final Pair<Type, Type> bound) -> {
             throw new IllegalStateException(String.format(
-                    "Task implementation %s has unbounded generic parameter %s with upper bound of %s. Refactor this task to ensure generic parameter is not erased.",
+                    GENERIC_TASK_IMPLEMENTATION_ERROR_TEMPLATE,
                     this.name,
                     bound.getLeft(),
                     bound.getRight()
