@@ -1,6 +1,9 @@
 package com.engineersbox.exmesh;
 
 import com.engineersbox.exmesh.execution.Task;
+import com.engineersbox.exmesh.execution.dependency.AllocationStrategy;
+import com.engineersbox.exmesh.execution.dependency.DependencyContext;
+import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
@@ -106,6 +109,10 @@ public class Main {
         }
     }
 
+    @DependencyContext(
+            strategy = AllocationStrategy.ANY_WITH_ONE,
+            condition = ExecutionCondition.PIPELINED
+    )
     private static class TaskD extends Task<Integer, Iterable<Integer>, Void, Void> {
 
         public TaskD() {
