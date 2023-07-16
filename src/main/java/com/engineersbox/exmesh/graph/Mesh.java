@@ -104,7 +104,7 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
     @Override
     public E addEdge(final Task<?, ?, ?, ?> sourceVertex,
                      final Task<?, ?, ?, ?> targetVertex) {
-        throw new UnsupportedOperationException("Generic direct graph edge creation is not supported. Use connection specific handlers.");
+        throw new UnsupportedOperationException("Generic mesh edge creation is not supported. Use connection specific handlers.");
     }
 
     @Deprecated
@@ -112,6 +112,6 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
     public boolean addEdge(final Task<?, ?, ?, ?> sourceVertex,
                            final Task<?, ?, ?, ?> targetVertex,
                            final E edge) {
-        throw new UnsupportedOperationException("Generic direct graph edge creation is not supported. Use connection specific handlers.");
+        throw new UnsupportedOperationException("Generic mesh edge creation is not supported. Use connection specific handlers.");
     }
 }
