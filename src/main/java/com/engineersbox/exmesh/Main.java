@@ -189,10 +189,10 @@ public class Main {
         mesh.addVertex(C);
         mesh.addVertex(D);
 //        mesh.addVertex(E);
-        mesh.addEdge(A, B);
-        mesh.addEdge(A, C);
-        mesh.addEdge(B, D);
-        mesh.addEdge(C, D);
+        mesh.addEdgeC2S(A, B);
+        mesh.addEdgeS2S(A, C);
+        mesh.addEdgeS2S(B, D);
+        mesh.addEdgeC2C(C, D);
 
         final Scheduler scheduler = new Scheduler(
                 mesh,

@@ -14,11 +14,26 @@ public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
     private final ConcurrentLinkedQueue<Object> queue;
     private final int capacity;
     private final ReentrantLock lock;
+    private ConnectionType connectionType;
 
     public Pipe(final int capacity) {
+        this(capacity, null);
+    }
+
+    public Pipe(final int capacity,
+                final ConnectionType connectionType) {
         this.queue = new ConcurrentLinkedQueue<>();
         this.capacity = capacity;
         this.lock = new ReentrantLock(true);
+        this.connectionType = connectionType;
+    }
+
+    public void setConnectionType(final ConnectionType connectionType) {
+        this.connectionType = connectionType;
+    }
+
+    public ConnectionType getConnectionType() {
+        return this.connectionType;
     }
 
     @Override
