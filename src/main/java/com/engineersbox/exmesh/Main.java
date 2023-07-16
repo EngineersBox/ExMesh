@@ -45,7 +45,7 @@ public class Main {
         }
     }
 
-    private static class TaskB extends Task<List<Double>, List<Double>, Iterable<Integer>, Integer> {
+    private static class TaskB extends Task<List<Double>, List<Double>, Iterable<Integer>, Iterable<Integer>> {
 
         public TaskB() {
             super("B", 1.0);
@@ -67,7 +67,7 @@ public class Main {
         }
 
         @Override
-        public Integer splitSingle() {
+        public Iterable<Integer> splitSingle() {
             return null;
         }
 
@@ -191,7 +191,7 @@ public class Main {
 //        mesh.addVertex(E);
         mesh.addEdgeC2S(A, B);
         mesh.addEdgeS2S(A, C);
-        mesh.addEdgeS2S(B, D);
+        mesh.addEdgeS2C(B, D);
         mesh.addEdgeC2C(C, D);
 
         final Scheduler scheduler = new Scheduler(
