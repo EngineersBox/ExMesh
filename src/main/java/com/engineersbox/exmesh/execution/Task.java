@@ -41,7 +41,8 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     /* NOTE: A task that is waiting for one or more dependent tasks to complete, with results pushed into
      * deques in each edge (Pipe), can be allocated a thread in a pre-execution state (name TBC), which can
      * invoke the methods in the Consolidatable interface to collect results ahead of time to prevent waiting
-     * for consolidation to happen at task start up.
+     * for consolidation to happen at task start up once all dependent tasks are finished or all dependent
+     * queues are full.
      */
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Task.class);
