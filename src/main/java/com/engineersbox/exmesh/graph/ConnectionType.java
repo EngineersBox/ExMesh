@@ -1,8 +1,8 @@
 package com.engineersbox.exmesh.graph;
 
 public enum ConnectionType {
-    S2S,
-    C2C,
-    S2C,
-    C2S
+    SINGLETON_TO_SINGLETON,
+    COLLECTION_TO_COLLECTION,
+    SINGLETON_TO_COLLECTION,
+    COLLECTION_TO_SINGLETON
 }

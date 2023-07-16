@@ -1,12 +1,8 @@
 package com.engineersbox.exmesh.graph;
 
 import com.engineersbox.exmesh.execution.Task;
-import org.checkerframework.checker.units.qual.C;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DirectedPseudograph;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 
-import java.util.Set;
 import java.util.function.Supplier;
 
 public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,?>, E> {
@@ -26,8 +22,8 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                                             final E edge) {
 
         return saturateEdgeType(
-                addEdge(sourceVertex, targetVertex, edge, "single-to-single"),
-                ConnectionType.S2S
+                addEdge(sourceVertex, targetVertex, edge, ConnectionType.SINGLETON_TO_SINGLETON),
+                ConnectionType.SINGLETON_TO_SINGLETON
         );
     }
 
@@ -40,8 +36,8 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                                             final Task<?,DC,?,?> targetVertex,
                                             final E edge) {
         return saturateEdgeType(
-                addEdge(sourceVertex, targetVertex, edge, "collection-to-collection"),
-                ConnectionType.C2C
+                addEdge(sourceVertex, targetVertex, edge, ConnectionType.COLLECTION_TO_COLLECTION),
+                ConnectionType.COLLECTION_TO_COLLECTION
         );
     }
 
@@ -54,8 +50,8 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                                             final Task<?,DC,?,?> targetVertex,
                                             final E edge) {
         return saturateEdgeType(
-                addEdge(sourceVertex, targetVertex, edge, "single-to-collection"),
-                ConnectionType.S2C
+                addEdge(sourceVertex, targetVertex, edge, ConnectionType.SINGLETON_TO_COLLECTION),
+                ConnectionType.SINGLETON_TO_COLLECTION
         );
     }
 
@@ -68,8 +64,8 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                                             final Task<DS,?,?,?> targetVertex,
                                             final E edge) {
         return saturateEdgeType(
-                addEdge(sourceVertex, targetVertex, edge, "collection-to-single"),
-                ConnectionType.C2S
+                addEdge(sourceVertex, targetVertex, edge, ConnectionType.COLLECTION_TO_SINGLETON),
+                ConnectionType.COLLECTION_TO_SINGLETON
         );
     }
 
@@ -85,12 +81,12 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
             D_IS, D_IC, D_OC, D_OS> E addEdge(final Task<S_IS, S_IC, S_OC, S_OS> sourceVertex,
                                               final Task<D_IS, D_IC, D_OC, D_OS> targetVertex,
                                               final E edge,
-                                              final String invokedKind) {
+                                              final ConnectionType connectionType) {
         if (!targetVertex.accepts(sourceVertex)) {
             throw new IllegalStateException(String.format(
                     "Cannot connect tasks [%s => %s] of connection kind [%s] with incompatible type bounds:\n\tSource Vertex:\n\t\t[OUT SINGLE: %s]\n\t\t[OUT COLLECTION: %s]\n\tTarget Vertex\n\t\t[IN SINGLE: %s]\n\t\t[IN COLLECTION: %s]",
                     sourceVertex.getName(), targetVertex.getName(),
-                    invokedKind,
+                    connectionType.name(),
                     sourceVertex.getOutputSingleType().getType(), sourceVertex.getOutputCollectionType().getType(),
                     targetVertex.getInputSingleType().getType(), targetVertex.getInputCollectionType().getType()
             ));
