@@ -6,6 +6,7 @@ import com.engineersbox.exmesh.execution.dependency.DependencyContext;
 import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.WarpInterleavedScheduler;
 
 import java.util.Collection;
@@ -194,7 +195,7 @@ public class Main {
         mesh.addEdgeS2C(B, D);
         mesh.addEdgeC2C(C, D);
 
-        final WarpInterleavedScheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
+        final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
                 mesh,
                 4,
                 2,

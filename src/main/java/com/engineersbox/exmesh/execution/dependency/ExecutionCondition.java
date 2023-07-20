@@ -5,6 +5,12 @@ package com.engineersbox.exmesh.execution.dependency;
  * a resource has been allocated.
  */
 public enum ExecutionCondition {
-    BARRIER, // Wait for all previous tasks to finish
-    PIPELINED // Start immediately on queued results
+    /**
+     * Wait for all previous tasks to finish
+     */
+    BARRIER,
+    /**
+     * Start immediately on queued results, if resources have benn allocated
+     */
+    PIPELINED
 }
