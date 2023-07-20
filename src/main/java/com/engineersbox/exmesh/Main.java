@@ -194,6 +194,7 @@ public class Main {
         mesh.addEdgeS2S(A, C);
         mesh.addEdgeS2C(B, D);
         mesh.addEdgeC2C(C, D);
+//        mesh.addEdgeC2C(C, new TestTask<String, Collection<Integer>,Void,Void>());
 
         final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
                 mesh,
