@@ -197,11 +197,11 @@ public class Main {
 //        mesh.addEdgeC2C(C, new TestTask<String, Collection<Integer>,Void,Void>());
 
         final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
-                mesh,
                 4,
                 2,
                 10
         );
+        warpInterleavedScheduler.submit(mesh);
     }
 
 }

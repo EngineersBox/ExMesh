@@ -1,5 +1,8 @@
 package com.engineersbox.exmesh.scheduling;
 
+import com.engineersbox.exmesh.execution.Task;
+import com.engineersbox.exmesh.graph.Mesh;
+import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 
 public abstract class Scheduler {
@@ -9,6 +12,18 @@ public abstract class Scheduler {
     protected Scheduler(final Allocator allocator) {
         this.allocator = allocator;
     }
+
+    /**
+     * Submit a set of tasks to be scheduled.
+     * @param tasks Task set
+     */
+    public abstract void submit(final Task<?,?,?,?> ...tasks);
+
+    /**
+     * Submit a mesh of tasks to schedule.
+     * @param mesh Mesh instance
+     */
+    public abstract void submit(final Mesh<? extends Pipe> mesh);
 
     /**
      * Determine the candidacy of tasks ready to be issued
