@@ -12,11 +12,39 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         super(null, edgeSupplier);
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Singleton</b></li>
+     *     <li><i>TARGET</i>: <b>Singleton</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting singletons of results
+     * @param targetVertex Target task capable of consuming singletons of results
+     * @return Edge instance
+     * @param <DS> Target singleton type
+     * @param <SS> Source singleton type (must extend or be the same as target singleton type)
+     */
     public <DS, SS extends DS> E addEdgeS2S(final Task<?,?,?,SS> sourceVertex,
                                             final Task<DS,?,?,?> targetVertex) {
         return addEdgeS2S(sourceVertex, targetVertex, null);
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Singleton</b></li>
+     *     <li><i>TARGET</i>: <b>Singleton</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting singletons of results
+     * @param targetVertex Target task capable of consuming singletons of results
+     * @return Edge instance
+     * @param <DS> Target singleton type
+     * @param <SS> Source singleton type (must extend or be the same as target singleton type)
+     */
     public <DS, SS extends DS> E addEdgeS2S(final Task<?,?,?,SS> sourceVertex,
                                             final Task<DS,?,?,?> targetVertex,
                                             final E edge) {
@@ -27,11 +55,39 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         );
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Collection</b></li>
+     *     <li><i>TARGET</i>: <b>Collection</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting collections of results
+     * @param targetVertex Target task capable of consuming collections of results
+     * @return Edge instance
+     * @param <DC> Target collection type
+     * @param <SC> Source collection type (must extend or be the same as target collection type)
+     */
     public <DC, SC extends DC> E addEdgeC2C(final Task<?,?,SC,?> sourceVertex,
                                             final Task<?,DC,?,?> targetVertex) {
         return addEdgeC2C(sourceVertex, targetVertex, null);
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Collection</b></li>
+     *     <li><i>TARGET</i>: <b>Collection</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting collections of results
+     * @param targetVertex Target task capable of consuming collections of results
+     * @return Edge instance
+     * @param <DC> Target collection type
+     * @param <SC> Source collection type (must extend or be the same as target collection type)
+     */
     public <DC, SC extends DC> E addEdgeC2C(final Task<?,?,SC,?> sourceVertex,
                                             final Task<?,DC,?,?> targetVertex,
                                             final E edge) {
@@ -41,11 +97,39 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         );
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Singleton</b></li>
+     *     <li><i>TARGET</i>: <b>Collection</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting singletons of results
+     * @param targetVertex Target task capable of consuming collections of results (from a singleton result)
+     * @return Edge instance
+     * @param <DC> Target collection type
+     * @param <SS> Source singleton type (must extend or be the same as target collection type)
+     */
     public <DC, SS extends DC> E addEdgeS2C(final Task<?,?,?,SS> sourceVertex,
                                             final Task<?,DC,?,?> targetVertex) {
         return addEdgeS2C(sourceVertex, targetVertex, null);
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Singleton</b></li>
+     *     <li><i>TARGET</i>: <b>Collection</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting singletons of results
+     * @param targetVertex Target task capable of consuming collections of results (from a singleton result)
+     * @return Edge instance
+     * @param <DC> Target collection type
+     * @param <SS> Source singleton type (must extend or be the same as target collection type)
+     */
     public <DC, SS extends DC> E addEdgeS2C(final Task<?,?,?,SS> sourceVertex,
                                             final Task<?,DC,?,?> targetVertex,
                                             final E edge) {
@@ -55,11 +139,39 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         );
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Collection</b></li>
+     *     <li><i>TARGET</i>: <b>Singleton</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting collections of results
+     * @param targetVertex Target task capable of consuming singletons of results (from a collection of results)
+     * @return Edge instance
+     * @param <DS> Target singleton type
+     * @param <SC> Source collection type (must extend or be the same as target singleton type)
+     */
     public <DS, SC extends DS> E addEdgeC2S(final Task<?,?,SC,?> sourceVertex,
                                             final Task<DS,?,?,?> targetVertex) {
         return addEdgeC2S(sourceVertex, targetVertex, null);
     }
 
+    /**
+     * <p>
+     * Add an edge between task vertices for the following configuration
+     * <ul>
+     *     <li><i>SOURCE</i>: <b>Collection</b></li>
+     *     <li><i>TARGET</i>: <b>Singleton</b></li>
+     * </ul>
+     * </p>
+     * @param sourceVertex Source task capable of emitting collections of results
+     * @param targetVertex Target task capable of consuming singletons of results (from a collection of results)
+     * @return Edge instance
+     * @param <DS> Target singleton type
+     * @param <SC> Source collection type (must extend or be the same as target singleton type)
+     */
     public <DS, SC extends DS> E addEdgeC2S(final Task<?,?,SC,?> sourceVertex,
                                             final Task<DS,?,?,?> targetVertex,
                                             final E edge) {
@@ -96,6 +208,9 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         return super.addEdge(sourceVertex, targetVertex);
     }
 
+    /**
+     * Generic mesh edge creation is not supported. Use connection specific handlers.
+     */
     @Deprecated
     @Override
     public E addEdge(final Task<?, ?, ?, ?> sourceVertex,
@@ -103,6 +218,9 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
         throw new UnsupportedOperationException("Generic mesh edge creation is not supported. Use connection specific handlers.");
     }
 
+    /**
+     * Generic mesh edge creation is not supported. Use connection specific handlers.
+     */
     @Deprecated
     @Override
     public boolean addEdge(final Task<?, ?, ?, ?> sourceVertex,

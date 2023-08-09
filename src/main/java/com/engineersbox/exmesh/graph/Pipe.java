@@ -1,19 +1,12 @@
 package com.engineersbox.exmesh.graph;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.atomic.SpscAtomicArrayQueue;
 import org.jgrapht.graph.DefaultWeightedEdge;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.ReentrantLock;
+public class Pipe extends DefaultWeightedEdge implements MessagePassingQueue<Object> {
 
-public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
-
-    private final ConcurrentLinkedQueue<Object> queue;
-    private final int capacity;
-    private final ReentrantLock lock;
+    private final SpscAtomicArrayQueue<Object> queue;
     private ConnectionType connectionType;
 
     public Pipe(final int capacity) {
@@ -22,9 +15,7 @@ public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
 
     public Pipe(final int capacity,
                 final ConnectionType connectionType) {
-        this.queue = new ConcurrentLinkedQueue<>();
-        this.capacity = capacity;
-        this.lock = new ReentrantLock(true);
+        this.queue = new SpscAtomicArrayQueue<>(capacity);
         this.connectionType = connectionType;
     }
 
@@ -37,86 +28,8 @@ public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
     }
 
     @Override
-    public synchronized boolean offer(final Object t) {
-        lock.lock();
-        try {
-            if (this.queue.size() >= capacity) {
-                return false;
-            }
-            return this.queue.offer(t);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public int size() {
-        return this.queue.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return this.queue.isEmpty();
-    }
-
-    @Override
-    public boolean contains(final Object o) {
-        return this.queue.contains(o);
-    }
-
-    @Override
-    public Iterator<Object> iterator() {
-        return this.queue.iterator();
-    }
-
-    @Override
-    public Object[] toArray() {
-        return this.queue.toArray();
-    }
-
-    @Override
-    public <T1> T1[] toArray(final T1[] a) {
-        return this.queue.toArray(a);
-    }
-
-    @Override
-    public boolean add(final Object t) {
-        return offer(t);
-    }
-
-    @Override
-    public boolean remove(final Object o) {
-        return this.queue.remove(o);
-    }
-
-    @Override
-    public boolean containsAll(@NonNull final Collection<?> c) {
-        return this.queue.containsAll(c);
-    }
-
-    @Override
-    public boolean addAll(@NonNull final Collection<?> c) {
-        return this.queue.addAll(c);
-    }
-
-    @Override
-    public boolean removeAll(@NonNull final Collection<?> c) {
-        return this.queue.removeAll(c);
-    }
-
-    @Override
-    public boolean retainAll(@NonNull final Collection<?> c) {
-        return this.queue.retainAll(c);
-    }
-
-    @Override
-    public void clear() {
-        this.queue.clear();
-    }
-
-    @Override
-    public Object remove() {
-        return this.queue.remove();
+    public boolean offer(final Object o) {
+        return this.queue.offer(o);
     }
 
     @Override
@@ -125,13 +38,76 @@ public class Pipe extends DefaultWeightedEdge implements Queue<Object> {
     }
 
     @Override
-    public Object element() {
-        return this.queue.element();
-    }
-
-    @Override
     public Object peek() {
         return this.queue.peek();
     }
 
+    @Override
+    public int size() {
+        return this.queue.size();
+    }
+
+    @Override
+    public void clear() {
+        this.queue.clear();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.queue.isEmpty();
+    }
+
+    @Override
+    public int capacity() {
+        return this.queue.capacity();
+    }
+
+    @Override
+    public boolean relaxedOffer(final Object o) {
+        return this.queue.relaxedOffer(o);
+    }
+
+    @Override
+    public Object relaxedPoll() {
+        return this.queue.relaxedPoll();
+    }
+
+    @Override
+    public Object relaxedPeek() {
+        return this.queue.relaxedPeek();
+    }
+
+    @Override
+    public int drain(final Consumer<Object> consumer, final int limit) {
+        return this.queue.drain(consumer, limit);
+    }
+
+    @Override
+    public int fill(final Supplier<Object> supplier, final int limit) {
+        return this.queue.fill(supplier, limit);
+    }
+
+    @Override
+    public int drain(final Consumer<Object> consumer) {
+        return this.queue.drain(consumer);
+    }
+
+    @Override
+    public int fill(final Supplier<Object> supplier) {
+        return this.queue.fill(supplier);
+    }
+
+    @Override
+    public void drain(final Consumer<Object> consumer,
+                      final WaitStrategy waitStrategy,
+                      final ExitCondition exitCondition) {
+        this.queue.drain(consumer, waitStrategy, exitCondition);
+    }
+
+    @Override
+    public void fill(final Supplier<Object> supplier,
+                     final WaitStrategy waitStrategy,
+                     final ExitCondition exitCondition) {
+        this.queue.fill(supplier, waitStrategy, exitCondition);
+    }
 }

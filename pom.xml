@@ -37,6 +37,7 @@
         <typesafe.version>1.0.0</typesafe.version>
         <eclipse-collections.version>11.1.0</eclipse-collections.version>
         <jgrapht.version>1.5.2</jgrapht.version>
+        <jctools.version>4.0.1</jctools.version>
 
         <!-- Maven -->
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
@@ -57,6 +58,13 @@
     </properties>
 
 	<dependencies>
+        <!-- JCTools -->
+
+        <dependency>
+            <groupId>org.jctools</groupId>
+            <artifactId>jctools-core</artifactId>
+            <version>${jctools.version}</version>
+        </dependency>
         <!-- JGraphT -->
         <dependency>
             <groupId>org.jgrapht</groupId>
