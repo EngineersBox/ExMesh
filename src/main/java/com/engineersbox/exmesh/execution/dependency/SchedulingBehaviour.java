@@ -1,9 +1,6 @@
 package com.engineersbox.exmesh.execution.dependency;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * Specifies how the resource allocation and scheduler should behave with regards to the dependency this task
@@ -11,7 +8,8 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface DependencyContext {
+public @interface SchedulingBehaviour {
     AllocationStrategy strategy();
     ExecutionCondition condition();
+
 }

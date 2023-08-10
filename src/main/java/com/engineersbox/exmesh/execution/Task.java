@@ -1,5 +1,7 @@
 package com.engineersbox.exmesh.execution;
 
+import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
+import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviourImpl;
 import com.engineersbox.exmesh.execution.type.Compatibility;
 import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
@@ -17,6 +19,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -206,6 +209,20 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
      */
     @Override
     public abstract OC splitCollection(int count);
+
+    /**
+     * Programmatically provide an instance of {@link SchedulingBehaviour} for use in scheduling task.
+     * By default, this will check for an annotation present on the class first, returning it if found.
+     * Otherwise, it will return a default configuration as defined by {@link SchedulingBehaviourImpl#ofDefault()}.
+     * @return Instance of {@link SchedulingBehaviour}
+     */
+    public SchedulingBehaviour schedulingBehaviour() {
+        final SchedulingBehaviour annotation = this.getClass().getAnnotation(SchedulingBehaviour.class);
+        return Objects.requireNonNullElseGet(
+                annotation,
+                SchedulingBehaviourImpl::ofDefault
+        );
+    }
 
     @Override
     public String toString() {

@@ -2,7 +2,7 @@ package com.engineersbox.exmesh;
 
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.execution.dependency.AllocationStrategy;
-import com.engineersbox.exmesh.execution.dependency.DependencyContext;
+import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
 import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
@@ -110,7 +110,7 @@ public class Main {
         }
     }
 
-    @DependencyContext(
+    @SchedulingBehaviour(
             strategy = AllocationStrategy.ANY_WITH_ONE,
             condition = ExecutionCondition.PIPELINED
     )
