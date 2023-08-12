@@ -14,6 +14,7 @@ import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.SimpleScheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.WarpInterleavedScheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
+import com.google.common.collect.Iterables;
 import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,12 +47,14 @@ public class Main {
         }
 
         @Override
-        public Double splitSingle() {
+        public Double splitSingleton() {
+            LOGGER.info("[A] Splitting singleton");
             return 1.0d;
         }
 
         @Override
         public List<Double> splitCollection(int count) {
+            LOGGER.info("[A] Splitting collection of size {}", count);
             return List.of(1.0d);
         }
 
@@ -72,6 +75,7 @@ public class Main {
 
         @Override
         public List<Double> consolidateSingleton(final Iterable<List<Double>> values) {
+            LOGGER.info("[B] Consolidating {} singletons", Iterables.size(values));
             return null;
         }
 
@@ -81,7 +85,8 @@ public class Main {
         }
 
         @Override
-        public Iterable<Integer> splitSingle() {
+        public Iterable<Integer> splitSingleton() {
+            LOGGER.info("[B] Splitting singleton");
             return Lists.fixedSize.of(1);
         }
 
@@ -112,16 +117,18 @@ public class Main {
 
         @Override
         public Collection<Double> consolidateCollection(final Iterable<Iterable<Double>> collections) {
+            LOGGER.info("[C] Consolidating {} collections", Iterables.size(collections));
             return null;
         }
 
         @Override
-        public Collection<Integer> splitSingle() {
+        public Collection<Integer> splitSingleton() {
             return null;
         }
 
         @Override
         public Collection<Integer> splitCollection(int count) {
+            LOGGER.info("[C] Splitting collection of size {}", count);
             return Lists.fixedSize.of(1);
         }
 
@@ -146,16 +153,18 @@ public class Main {
 
         @Override
         public Iterable<Integer> consolidateSingleton(final Iterable<Integer> values) {
+            LOGGER.info("[D] Consolidating singleton");
             return Lists.fixedSize.of();
         }
 
         @Override
         public Iterable<Integer> consolidateCollection(final Iterable<Iterable<Integer>> collections) {
+            LOGGER.info("[D] Consolidating {} collections", Iterables.size(collections));
             return Lists.fixedSize.of();
         }
 
         @Override
-        public Void splitSingle() {
+        public Void splitSingleton() {
             return null;
         }
 
@@ -190,7 +199,7 @@ public class Main {
         }
 
         @Override
-        public OS splitSingle() {
+        public OS splitSingleton() {
             return null;
         }
 
@@ -259,17 +268,7 @@ public class Main {
 //                10
 //        );
         final Scheduler scheduler = new SimpleScheduler();
-        final ResourceFactory<? extends AllocatableResource> resourceFactory = new ResourceFactory<>() {
-            @Override
-            public AllocatableResource provision() {
-                return new TestResource();
-            }
-
-            @Override
-            public Iterable<AllocatableResource> provision(int count) {
-                return null;
-            }
-        };
+        final ResourceFactory<? extends AllocatableResource> resourceFactory = (ResourceFactory<AllocatableResource>) TestResource::new;
         final Allocator allocator = (final ResourceFactory<? extends AllocatableResource> rf, final Task<?,?,?,?> task) -> rf.provision();
         final Executor executor = new Executor(
                 scheduler,

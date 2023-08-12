@@ -6,7 +6,7 @@ public interface Splittable<OS, OC> {
      * Provide a single value from an internal collection or singleton to send to a task
      * @return Singleton element
      */
-    OS splitSingle();
+    OS splitSingleton();
 
     /**
      * Provide a collection from an internal collection or singleton to send to a task

@@ -1,5 +1,6 @@
 package com.engineersbox.exmesh.resource;
 
+@FunctionalInterface
 public interface ResourceFactory<T extends AllocatableResource> {
 
     /**
@@ -7,12 +8,5 @@ public interface ResourceFactory<T extends AllocatableResource> {
      * @return Resource instance
      */
     T provision();
-
-    /**
-     * Create a number of allocatable resources
-     * @param count Number of resources to allocate
-     * @return Instantiated resources
-     */
-    Iterable<T> provision(final int count);
 
 }

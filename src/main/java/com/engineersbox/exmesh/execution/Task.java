@@ -213,10 +213,10 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     public abstract IC consolidateCollection(final Iterable<IC> collections);
 
     /**
-     * @see Splittable#splitSingle()
+     * @see Splittable#splitSingleton()
      */
     @Override
-    public abstract OS splitSingle();
+    public abstract OS splitSingleton();
 
     /**
      * @see Splittable#splitCollection(int)

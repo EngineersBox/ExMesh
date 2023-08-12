@@ -21,7 +21,7 @@ public class ResultBatchPusher extends PipeInterfacingPolicy {
         final int collectionPartitionSize = collectionCount.getValue() < 1 ? 1 : (task.internalCollectionSize() - singletonCount.getValue()) / collectionCount.getValue();
         for (final Pipe pipe : pipes) {
             switch (pipe.getConnectionType()) {
-                case SINGLETON_TO_SINGLETON, SINGLETON_TO_COLLECTION -> pipe.offer(task.splitSingle());
+                case SINGLETON_TO_SINGLETON, SINGLETON_TO_COLLECTION -> pipe.offer(task.splitSingleton());
                 case COLLECTION_TO_COLLECTION, COLLECTION_TO_SINGLETON -> pipe.offer(task.splitCollection(collectionPartitionSize));
             }
         }
