@@ -279,7 +279,7 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
     }
 
     /**
-     * Generic mesh edge creation is not supported. Use connection specific handlers.
+     * @deprecated Generic mesh edge creation is not supported. Use connection specific handlers.
      */
     @Deprecated
     @DoNotCall
@@ -291,7 +291,7 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
     }
 
     /**
-     * Generic mesh edge creation is not supported. Use connection specific handlers.
+     * @deprecated Generic mesh edge creation is not supported. Use connection specific handlers.
      */
     @Deprecated
     @DoNotCall

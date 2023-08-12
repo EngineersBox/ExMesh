@@ -44,7 +44,6 @@ import java.util.Optional;
  * @param <OC> Output singleton type
  * @param <OS> Output collection type (comprised of one or more singletons)
  */
-@SuppressWarnings("unchecked")
 public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consolidatable<IS, IC> {
 
     /* NOTE: A task that is waiting for one or more dependent tasks to complete, with results pushed into
@@ -159,12 +158,12 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
         this.inputCollectionCompat = inputCollectionCompat;
     }
 
-    public boolean accepts(final TypeToken<?> type) {
+    public boolean accepts(@Nonnull final TypeToken<?> type) {
         return this.inputSingleCompat.check(type, this.inputSingleType)
             || this.inputCollectionCompat.check(type, this.inputCollectionType);
     }
 
-    public boolean accepts(final Task<?,?,?,?> task) {
+    public boolean accepts(@Nonnull final Task<?,?,?,?> task) {
         return accepts(task.outputSingleType) || accepts(task.outputCollectionType);
     }
 
