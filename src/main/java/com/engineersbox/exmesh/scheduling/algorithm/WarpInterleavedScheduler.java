@@ -36,17 +36,17 @@ public class WarpInterleavedScheduler extends Scheduler {
     }
 
     @Override
-    public synchronized void analyse() {
+    public void analyse() {
 
     }
 
     @Override
-    public synchronized void mark() {
+    public void mark() {
 
     }
 
     @Override
-    public synchronized void issue() {
+    public void issue() {
         // 1. Get next waiting tasks in mesh
         // 2. Group tasks into nodes based on common parents and dependency
         // 3. Issue task groups to EBDU
