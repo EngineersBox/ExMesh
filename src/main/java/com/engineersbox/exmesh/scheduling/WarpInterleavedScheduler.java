@@ -6,6 +6,8 @@ import com.engineersbox.exmesh.graph.Pipe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Collection;
+
 public class WarpInterleavedScheduler extends Scheduler {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WarpInterleavedScheduler.class);
@@ -23,7 +25,7 @@ public class WarpInterleavedScheduler extends Scheduler {
     }
 
     @Override
-    public void submit(final Task<?, ?, ?, ?>... tasks) {
+    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
 
     }
 

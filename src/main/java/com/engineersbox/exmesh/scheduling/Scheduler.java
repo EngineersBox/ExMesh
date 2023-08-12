@@ -5,6 +5,8 @@ import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 
+import java.util.Collection;
+
 public abstract class Scheduler {
 
     protected final Allocator allocator;
@@ -17,7 +19,7 @@ public abstract class Scheduler {
      * Submit a set of tasks to be scheduled.
      * @param tasks Task set
      */
-    public abstract void submit(final Task<?,?,?,?> ...tasks);
+    public abstract void submit(final Collection<Task<?,?,?,?>> tasks);
 
     /**
      * Submit a mesh of tasks to schedule.

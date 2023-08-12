@@ -8,6 +8,7 @@ import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.stream.IntStream;
 
 public class BufferInterleavedScheduler extends Scheduler {
@@ -29,7 +30,7 @@ public class BufferInterleavedScheduler extends Scheduler {
     }
 
     @Override
-    public void submit(final Task<?, ?, ?, ?>... tasks) {
+    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
 
     }
 

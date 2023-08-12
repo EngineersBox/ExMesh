@@ -9,6 +9,7 @@ import org.jctools.queues.SpscLinkedQueue;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class SimpleScheduler extends Scheduler {
 
@@ -20,8 +21,8 @@ public class SimpleScheduler extends Scheduler {
     }
 
     @Override
-    public void submit(Task<?, ?, ?, ?>... tasks) {
-        Arrays.stream(tasks).forEach(this.queue::offer);
+    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
+        tasks.forEach(this.queue::offer);
     }
 
     @Override
