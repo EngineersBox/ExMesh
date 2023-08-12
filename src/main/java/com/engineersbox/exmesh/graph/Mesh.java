@@ -5,7 +5,6 @@ import com.google.errorprone.annotations.DoNotCall;
 import org.jgrapht.graph.DirectedWeightedMultigraph;
 
 import javax.annotation.security.DenyAll;
-import java.util.Objects;
 import java.util.function.Supplier;
 
 public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,?>, E> {
@@ -268,7 +267,7 @@ public class Mesh<E extends Pipe> extends DirectedWeightedMultigraph<Task<?,?,?,
                     sourceVertex.getName(), destinationVertex.getName(),
                     connectionType.name(),
                     sourceVertex.getOutputSingleType().getType(), sourceVertex.getOutputCollectionType().getType(),
-                    destinationVertex.getInputSingleType().getType(), destinationVertex.getInputCollectionType().getType()
+                    destinationVertex.getInputSingletonType().getType(), destinationVertex.getInputCollectionType().getType()
             ));
         }
         updateTaskParent(sourceVertex);

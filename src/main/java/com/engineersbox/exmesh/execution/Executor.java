@@ -10,6 +10,8 @@ import org.eclipse.collections.api.RichIterable;
 import org.jctools.queues.SpscArrayQueue;
 import org.jctools.queues.atomic.SpscAtomicArrayQueue;
 
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.Future;
 
 public class Executor implements Runnable {
@@ -51,10 +53,13 @@ public class Executor implements Runnable {
     private StateManager consolidate(final StateManager stateManager) {
         final Task<?,?,?,?> task = stateManager.task;
         final Mesh<? extends Pipe> mesh = task.getParent();
-        task.getIngressPolicy().interfaceWith(
-                mesh.incomingEdgesOf(task),
-                task
-        );
+        final Set<? extends Pipe> pipes = mesh.incomingEdgesOf(task);
+        if (!pipes.isEmpty()) {
+            task.getIngressPolicy().interfaceWith(
+                    mesh.incomingEdgesOf(task),
+                    task
+            );
+        }
         return stateManager;
     }
 
@@ -75,10 +80,13 @@ public class Executor implements Runnable {
     private StateManager split(final StateManager stateManager) {
         final Task<?,?,?,?> task = stateManager.task;
         final Mesh<? extends Pipe> mesh = task.getParent();
-        task.getEgressPolicy().interfaceWith(
-                mesh.outgoingEdgesOf(task),
-                task
-        );
+        final Set<? extends Pipe> pipes = mesh.outgoingEdgesOf(task);
+        if (!pipes.isEmpty()) {
+            task.getEgressPolicy().interfaceWith(
+                    mesh.outgoingEdgesOf(task),
+                    task
+            );
+        }
         return stateManager;
     }
 
@@ -102,7 +110,8 @@ public class Executor implements Runnable {
                     .collect(this::initialiseResource)
                     .collect(this::executeTask);
             final SpscArrayQueue<Future<ExecutionResult>> futures = new SpscArrayQueue<>(resources.size());
-            resources.each((final StateManager stateManager) -> futures.offer(stateManager.result));
+            resources.select((final StateManager stateManager) -> Objects.nonNull(stateManager.result))
+                    .each((final StateManager stateManager) -> futures.offer(stateManager.result));
             Future<ExecutionResult> future;
             while ((future = futures.poll()) != null) {
                 if (!future.isDone()) {

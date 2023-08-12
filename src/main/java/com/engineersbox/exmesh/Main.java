@@ -1,5 +1,6 @@
 package com.engineersbox.exmesh;
 
+import com.engineersbox.exmesh.execution.ExecutionResult;
 import com.engineersbox.exmesh.execution.Executor;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.execution.dependency.AllocationStrategy;
@@ -10,13 +11,20 @@ import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.resource.AllocatableResource;
 import com.engineersbox.exmesh.resource.ResourceFactory;
 import com.engineersbox.exmesh.scheduling.Scheduler;
+import com.engineersbox.exmesh.scheduling.algorithm.SimpleScheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.WarpInterleavedScheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
+import org.eclipse.collections.api.factory.Lists;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.Future;
 
 public class Main {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     private static class TaskA extends Task<String, Void, List<Double>, Double> {
 
@@ -28,28 +36,28 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Void consolidateSingle(String... values) {
+        public Void consolidateSingleton(final Iterable<String> values) {
             return null;
         }
 
         @Override
-        public Void consolidateCollection(Void... collections) {
+        public Void consolidateCollection(final Iterable<Void> collections) {
             return null;
         }
 
         @Override
         public Double splitSingle() {
-            return null;
+            return 1.0d;
         }
 
         @Override
         public List<Double> splitCollection(int count) {
-            return null;
+            return List.of(1.0d);
         }
 
         @Override
         public int internalCollectionSize() {
-            return 0;
+            return 2;
         }
     }
 
@@ -63,18 +71,18 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public List<Double> consolidateSingle(List<Double>... values) {
+        public List<Double> consolidateSingleton(final Iterable<List<Double>> values) {
             return null;
         }
 
         @Override
-        public List<Double> consolidateCollection(List<Double>... collections) {
+        public List<Double> consolidateCollection(final Iterable<List<Double>> collections) {
             return null;
         }
 
         @Override
         public Iterable<Integer> splitSingle() {
-            return null;
+            return Lists.fixedSize.of(1);
         }
 
         @Override
@@ -98,12 +106,12 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Collection<Double> consolidateSingle(Double... values) {
+        public Collection<Double> consolidateSingleton(final Iterable<Double> values) {
             return null;
         }
 
         @Override
-        public Collection<Double> consolidateCollection(Iterable<Double>... collections) {
+        public Collection<Double> consolidateCollection(final Iterable<Iterable<Double>> collections) {
             return null;
         }
 
@@ -114,7 +122,7 @@ public class Main {
 
         @Override
         public Collection<Integer> splitCollection(int count) {
-            return null;
+            return Lists.fixedSize.of(1);
         }
 
         @Override
@@ -137,13 +145,13 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Iterable<Integer> consolidateSingle(Integer... values) {
-            return null;
+        public Iterable<Integer> consolidateSingleton(final Iterable<Integer> values) {
+            return Lists.fixedSize.of();
         }
 
         @Override
-        public Iterable<Integer> consolidateCollection(Iterable<Integer>... collections) {
-            return null;
+        public Iterable<Integer> consolidateCollection(final Iterable<Iterable<Integer>> collections) {
+            return Lists.fixedSize.of();
         }
 
         @Override
@@ -172,12 +180,12 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public IC consolidateSingle(IS... values) {
+        public IC consolidateSingleton(final Iterable<IS> values) {
             return null;
         }
 
         @Override
-        public IC consolidateCollection(IC... collections) {
+        public IC consolidateCollection(final Iterable<IC> collections) {
             return null;
         }
 
@@ -194,6 +202,36 @@ public class Main {
         @Override
         public int internalCollectionSize() {
             return 0;
+        }
+    }
+
+    private static final class TestResource implements AllocatableResource {
+
+        @Override
+        public void startup() {
+
+        }
+
+        @Override
+        public void configure() {
+
+        }
+
+        @Override
+        public Future<ExecutionResult> apply(final Task<?, ?, ?, ?> task) {
+            LOGGER.info("Executing: {}", task.getName());
+            task.invoke();
+            return null;
+        }
+
+        @Override
+        public void cleanup() {
+
+        }
+
+        @Override
+        public void teardown() {
+
         }
     }
 
@@ -215,25 +253,26 @@ public class Main {
         mesh.addEdgeC2C(C, D);
 //        mesh.addEdgeC2C(C, new TestTask<String, Collection<Integer>,Void,Void>());
 
-        final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
-                4,
-                2,
-                10
-        );
+//        final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
+//                4,
+//                2,
+//                10
+//        );
+        final Scheduler scheduler = new SimpleScheduler();
         final ResourceFactory<? extends AllocatableResource> resourceFactory = new ResourceFactory<>() {
             @Override
-            public AllocatableResource provision() throws Exception {
-                return null;
+            public AllocatableResource provision() {
+                return new TestResource();
             }
 
             @Override
-            public Iterable<AllocatableResource> provision(int count) throws Exception {
+            public Iterable<AllocatableResource> provision(int count) {
                 return null;
             }
         };
-        final Allocator allocator = (final ResourceFactory<? extends AllocatableResource> rf, final Task<?,?,?,?> task) -> {return null;};
+        final Allocator allocator = (final ResourceFactory<? extends AllocatableResource> rf, final Task<?,?,?,?> task) -> rf.provision();
         final Executor executor = new Executor(
-                warpInterleavedScheduler,
+                scheduler,
                 resourceFactory,
                 allocator,
                 1

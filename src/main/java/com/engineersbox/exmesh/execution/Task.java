@@ -167,7 +167,7 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
         return accepts(task.outputSingleType) || accepts(task.outputCollectionType);
     }
 
-    public TypeToken<IS> getInputSingleType() {
+    public TypeToken<IS> getInputSingletonType() {
         return this.inputSingleType;
     }
 
@@ -201,16 +201,16 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     public abstract void invoke();
 
     /**
-     * @see Consolidatable#consolidateSingle(Object[])
+     * @see Consolidatable#consolidateSingleton(Iterable)
      */
     @Override
-    public abstract IC consolidateSingle(final IS... values);
+    public abstract IC consolidateSingleton(final Iterable<IS> values);
 
     /**
-     * @see Consolidatable#consolidateCollection(Object[])
+     * @see Consolidatable#consolidateCollection(Iterable)
      */
     @Override
-    public abstract IC consolidateCollection(final IC... collections);
+    public abstract IC consolidateCollection(final Iterable<IC> collections);
 
     /**
      * @see Splittable#splitSingle()
@@ -222,7 +222,7 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
      * @see Splittable#splitCollection(int)
      */
     @Override
-    public abstract OC splitCollection(int count);
+    public abstract OC splitCollection(int partitionCount);
 
     /**
      * @see Splittable#internalCollectionSize()

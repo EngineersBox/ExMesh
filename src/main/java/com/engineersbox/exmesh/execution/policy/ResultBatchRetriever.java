@@ -2,7 +2,7 @@ package com.engineersbox.exmesh.execution.policy;
 
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Pipe;
-import org.jctools.queues.MessagePassingQueue;
+import org.eclipse.collections.api.factory.Sets;
 
 import java.util.Set;
 
@@ -13,15 +13,20 @@ import java.util.Set;
 public class ResultBatchRetriever extends PipeInterfacingPolicy {
 
     @Override
+    @SuppressWarnings("unchecked")
     public <IS,IC,OC,OS> void interfaceWith(final Set<? extends Pipe> sourcePipes,
                                             final Task<IS,IC,OC,OS> task) {
         for (final Pipe pipe : sourcePipes) {
             switch (pipe.getConnectionType()) {
                 case SINGLETON_TO_SINGLETON, COLLECTION_TO_SINGLETON -> pipe.drain(
-                        (MessagePassingQueue.Consumer<Object>) (MessagePassingQueue.Consumer<IS>) task::consolidateSingle
+                        (final Object obj) -> task.consolidateSingleton((Iterable<IS>) Sets.fixedSize.of(
+                                task.getInputSingletonType().getRawType().cast(obj)
+                        ))
                 );
                 case COLLECTION_TO_COLLECTION, SINGLETON_TO_COLLECTION -> pipe.drain(
-                        (MessagePassingQueue.Consumer<Object>) (MessagePassingQueue.Consumer<IC>) task::consolidateCollection
+                        (final Object obj) -> task.consolidateCollection((Iterable<IC>) Sets.fixedSize.of(
+                                task.getInputCollectionType().getRawType().cast(obj)
+                        ))
                 );
             }
         }

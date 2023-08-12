@@ -7,13 +7,13 @@ public interface Consolidatable<IS, IC> {
      * @param values Output(s) of a previous task
      * @return Collection or singleton accumulated with input value
      */
-    IC consolidateSingle(final IS... values);
+    IC consolidateSingleton(final Iterable<IS> values);
 
     /**
      * Accept collections as an input from another task, accumulated with any internal collection tye if necessary
      * @param collections Output(s) of a previous task
      * @return Collection or singleton accumulated with input collection
      */
-    IC consolidateCollection(final IC... collections);
+    IC consolidateCollection(final Iterable<IC> collections);
 
 }

@@ -10,10 +10,10 @@ public interface Splittable<OS, OC> {
 
     /**
      * Provide a collection from an internal collection or singleton to send to a task
-     * @param count Number of elements in the collection
+     * @param partitionCount Number of elements in the collection
      * @return Collection of elements
      */
-    OC splitCollection(final int count);
+    OC splitCollection(final int partitionCount);
 
     /**
      * Provide total size of internal collection storing task results
