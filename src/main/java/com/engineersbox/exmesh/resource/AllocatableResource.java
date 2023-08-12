@@ -3,6 +3,7 @@ package com.engineersbox.exmesh.resource;
 import com.engineersbox.exmesh.execution.ExecutionResult;
 import com.engineersbox.exmesh.execution.Task;
 
+import javax.annotation.Nonnull;
 import java.util.concurrent.Future;
 import java.util.function.Function;
 
@@ -24,6 +25,7 @@ public interface AllocatableResource extends Function<Task<?,?,?,?>, Future<Exec
      * @return result of the execution of the task
      */
     @Override
+    @Nonnull
     Future<ExecutionResult> apply(final Task<?,?,?,?> task);
 
     /**

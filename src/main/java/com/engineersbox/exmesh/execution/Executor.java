@@ -12,6 +12,7 @@ import org.jctools.queues.atomic.SpscAtomicArrayQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Future;
@@ -164,6 +165,7 @@ public class Executor implements Runnable {
             this.resource.configure();
         }
 
+        @Nonnull
         @Override
         public Future<ExecutionResult> apply(final Task<?, ?, ?, ?> task) {
             return this.resource.apply(task);

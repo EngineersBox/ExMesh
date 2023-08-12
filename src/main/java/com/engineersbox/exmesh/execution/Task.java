@@ -19,6 +19,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -204,23 +205,25 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
      * @see Consolidatable#consolidateSingleton(Iterable)
      */
     @Override
-    public abstract IC consolidateSingleton(final Iterable<IS> values);
+    public abstract IC consolidateSingleton(@Nonnull final Iterable<IS> values);
 
     /**
      * @see Consolidatable#consolidateCollection(Iterable)
      */
     @Override
-    public abstract IC consolidateCollection(final Iterable<IC> collections);
+    public abstract IC consolidateCollection(@Nonnull final Iterable<IC> collections);
 
     /**
      * @see Splittable#splitSingleton()
      */
+    @Nonnull
     @Override
     public abstract OS splitSingleton();
 
     /**
      * @see Splittable#splitCollection(int)
      */
+    @Nonnull
     @Override
     public abstract OC splitCollection(int partitionCount);
 

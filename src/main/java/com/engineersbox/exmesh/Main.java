@@ -18,6 +18,7 @@ import org.eclipse.collections.api.factory.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -37,21 +38,23 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Void consolidateSingleton(final Iterable<String> values) {
+        public Void consolidateSingleton(@Nonnull final Iterable<String> values) {
             return null;
         }
 
         @Override
-        public Void consolidateCollection(final Iterable<Void> collections) {
+        public Void consolidateCollection(@Nonnull final Iterable<Void> collections) {
             return null;
         }
 
+        @Nonnull
         @Override
         public Double splitSingleton() {
             LOGGER.info("[A] Splitting singleton");
             return 1.0d;
         }
 
+        @Nonnull
         @Override
         public List<Double> splitCollection(int count) {
             LOGGER.info("[A] Splitting collection of size {}", count);
@@ -74,22 +77,24 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public List<Double> consolidateSingleton(final Iterable<List<Double>> values) {
+        public List<Double> consolidateSingleton(@Nonnull final Iterable<List<Double>> values) {
             LOGGER.info("[B] Consolidating {} singletons", Iterables.size(values));
             return null;
         }
 
         @Override
-        public List<Double> consolidateCollection(final Iterable<List<Double>> collections) {
+        public List<Double> consolidateCollection(@Nonnull final Iterable<List<Double>> collections) {
             return null;
         }
 
+        @Nonnull
         @Override
         public Iterable<Integer> splitSingleton() {
             LOGGER.info("[B] Splitting singleton");
             return Lists.fixedSize.of(1);
         }
 
+        @Nonnull
         @Override
         public Iterable<Integer> splitCollection(int count) {
             return null;
@@ -111,21 +116,23 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Collection<Double> consolidateSingleton(final Iterable<Double> values) {
+        public Collection<Double> consolidateSingleton(@Nonnull final Iterable<Double> values) {
             return null;
         }
 
         @Override
-        public Collection<Double> consolidateCollection(final Iterable<Iterable<Double>> collections) {
+        public Collection<Double> consolidateCollection(@Nonnull final Iterable<Iterable<Double>> collections) {
             LOGGER.info("[C] Consolidating {} collections", Iterables.size(collections));
             return null;
         }
 
+        @Nonnull
         @Override
         public Collection<Integer> splitSingleton() {
             return null;
         }
 
+        @Nonnull
         @Override
         public Collection<Integer> splitCollection(int count) {
             LOGGER.info("[C] Splitting collection of size {}", count);
@@ -152,22 +159,24 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public Iterable<Integer> consolidateSingleton(final Iterable<Integer> values) {
+        public Iterable<Integer> consolidateSingleton(@Nonnull final Iterable<Integer> values) {
             LOGGER.info("[D] Consolidating singleton");
             return Lists.fixedSize.of();
         }
 
         @Override
-        public Iterable<Integer> consolidateCollection(final Iterable<Iterable<Integer>> collections) {
+        public Iterable<Integer> consolidateCollection(@Nonnull final Iterable<Iterable<Integer>> collections) {
             LOGGER.info("[D] Consolidating {} collections", Iterables.size(collections));
             return Lists.fixedSize.of();
         }
 
+        @Nonnull
         @Override
         public Void splitSingleton() {
             return null;
         }
 
+        @Nonnull
         @Override
         public Void splitCollection(int count) {
             return null;
@@ -189,20 +198,22 @@ public class Main {
         public void invoke() {}
 
         @Override
-        public IC consolidateSingleton(final Iterable<IS> values) {
+        public IC consolidateSingleton(@Nonnull final Iterable<IS> values) {
             return null;
         }
 
         @Override
-        public IC consolidateCollection(final Iterable<IC> collections) {
+        public IC consolidateCollection(@Nonnull final Iterable<IC> collections) {
             return null;
         }
 
+        @Nonnull
         @Override
         public OS splitSingleton() {
             return null;
         }
 
+        @Nonnull
         @Override
         public OC splitCollection(int count) {
             return null;
@@ -226,6 +237,7 @@ public class Main {
 
         }
 
+        @Nonnull
         @Override
         public Future<ExecutionResult> apply(final Task<?, ?, ?, ?> task) {
             LOGGER.info("Executing: {}", task.getName());
