@@ -12,7 +12,6 @@ import com.engineersbox.exmesh.resource.AllocatableResource;
 import com.engineersbox.exmesh.resource.ResourceFactory;
 import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.SimpleScheduler;
-import com.engineersbox.exmesh.scheduling.algorithm.WarpInterleavedScheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 import com.google.common.collect.Iterables;
 import org.eclipse.collections.api.factory.Lists;
@@ -244,7 +243,7 @@ public class Main {
         }
     }
 
-    public static void main(final String[] args) {
+    private static Mesh<Pipe> createTestMesh() {
         final Mesh<Pipe> mesh = new Mesh<>(() -> new Pipe(5));
         final TaskA A = new TaskA();
         final TaskB B = new TaskB();
@@ -261,7 +260,11 @@ public class Main {
         mesh.addEdgeS2C(B, D);
         mesh.addEdgeC2C(C, D);
 //        mesh.addEdgeC2C(C, new TestTask<String, Collection<Integer>,Void,Void>());
+        return mesh;
+    }
 
+    public static void main(final String[] args) {
+        final Mesh<Pipe> mesh = createTestMesh();
 //        final Scheduler warpInterleavedScheduler = new WarpInterleavedScheduler(
 //                4,
 //                2,
