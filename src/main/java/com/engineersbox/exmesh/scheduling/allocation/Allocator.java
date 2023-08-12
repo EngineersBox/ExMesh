@@ -1,5 +1,6 @@
 package com.engineersbox.exmesh.scheduling.allocation;
 
+import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 
@@ -11,5 +12,7 @@ public interface Allocator {
      * @param <E> Edge type
      */
     <E extends Pipe> void allocate(final Mesh<E> mesh);
+
+    void allocate(final Task<?,?,?,?> task);
 
 }
