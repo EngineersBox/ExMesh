@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 public class Main {
@@ -229,7 +230,7 @@ public class Main {
         public Future<ExecutionResult> apply(final Task<?, ?, ?, ?> task) {
             LOGGER.info("Executing: {}", task.getName());
             task.invoke();
-            return null;
+            return CompletableFuture.completedFuture(null);
         }
 
         @Override

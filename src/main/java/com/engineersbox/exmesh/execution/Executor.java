@@ -9,12 +9,16 @@ import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 import org.eclipse.collections.api.RichIterable;
 import org.jctools.queues.SpscArrayQueue;
 import org.jctools.queues.atomic.SpscAtomicArrayQueue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 public class Executor implements Runnable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(Executor.class);
 
     private final Scheduler scheduler;
     private final ResourceFactory<? extends AllocatableResource> resourceFactory;
@@ -110,8 +114,18 @@ public class Executor implements Runnable {
                     .collect(this::initialiseResource)
                     .collect(this::executeTask);
             final SpscArrayQueue<Future<ExecutionResult>> futures = new SpscArrayQueue<>(resources.size());
-            resources.select((final StateManager stateManager) -> Objects.nonNull(stateManager.result))
-                    .each((final StateManager stateManager) -> futures.offer(stateManager.result));
+            resources.select((final StateManager stateManager) -> {
+                    if (stateManager.result == null) {
+                        LOGGER.warn(
+                                "Resource [{}] executing task [{}] returned null, expected instance of {}, skipping and assuming done",
+                                stateManager.resource,
+                                stateManager.task.getName(),
+                                Future.class.getName()
+                        );
+                        return false;
+                    }
+                    return true;
+            }).each((final StateManager stateManager) -> futures.offer(stateManager.result));
             Future<ExecutionResult> future;
             while ((future = futures.poll()) != null) {
                 if (!future.isDone()) {
