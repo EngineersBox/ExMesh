@@ -89,27 +89,29 @@ public class Executor implements Runnable {
 
     @Override
     public void run() {
-        /* 1. Run scheduler iteration (analyse, mark, issue)
-         * 2. Allocate resources to issued tasks (if allocation condition is met)
-         * 3. Configure resources for tasks
-         * 4. Invoke execution
-         * 5. Run cleanup for tasks on resources
-         */
-        final RichIterable<StateManager> resources = this.scheduler.executeIteration()
-                .collect(this::allocateResource)
-                .collect(this::consolidate)
-                .collect(this::initialiseResource)
-                .collect(this::executeTask);
-        final SpscArrayQueue<Future<ExecutionResult>> futures = new SpscArrayQueue<>(resources.size());
-        resources.each((final StateManager stateManager) -> futures.offer(stateManager.result));
-        Future<ExecutionResult> future;
-        while ((future = futures.poll()) != null) {
-            if (!future.isDone()) {
-                futures.offer(future);
+        RichIterable<Task<?,?,?,?>> tasks;
+        while ((tasks = this.scheduler.executeIteration()) != null && !tasks.isEmpty()) {
+            /* 1. Run scheduler iteration (analyse, mark, issue)
+             * 2. Allocate resources to issued tasks (if allocation condition is met)
+             * 3. Configure resources for tasks
+             * 4. Invoke execution
+             * 5. Run cleanup for tasks on resources
+             */
+            final RichIterable<StateManager> resources = tasks.collect(this::allocateResource)
+                    .collect(this::consolidate)
+                    .collect(this::initialiseResource)
+                    .collect(this::executeTask);
+            final SpscArrayQueue<Future<ExecutionResult>> futures = new SpscArrayQueue<>(resources.size());
+            resources.each((final StateManager stateManager) -> futures.offer(stateManager.result));
+            Future<ExecutionResult> future;
+            while ((future = futures.poll()) != null) {
+                if (!future.isDone()) {
+                    futures.offer(future);
+                }
             }
+            resources.collect(this::split)
+                    .each(this::cleanupResource);
         }
-        resources.collect(this::split)
-                .each(this::cleanupResource);
     }
 
     private static class StateManager implements AllocatableResource {

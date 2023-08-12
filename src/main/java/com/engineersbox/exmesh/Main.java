@@ -1,13 +1,17 @@
 package com.engineersbox.exmesh;
 
+import com.engineersbox.exmesh.execution.Executor;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.execution.dependency.AllocationStrategy;
 import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
 import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.resource.AllocatableResource;
+import com.engineersbox.exmesh.resource.ResourceFactory;
 import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.WarpInterleavedScheduler;
+import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,9 +25,7 @@ public class Main {
         }
 
         @Override
-        public List<Double> invoke(Void input) {
-            return null;
-        }
+        public void invoke() {}
 
         @Override
         public Void consolidateSingle(String... values) {
@@ -44,6 +46,11 @@ public class Main {
         public List<Double> splitCollection(int count) {
             return null;
         }
+
+        @Override
+        public int internalCollectionSize() {
+            return 0;
+        }
     }
 
     private static class TaskB extends Task<List<Double>, List<Double>, Iterable<Integer>, Iterable<Integer>> {
@@ -53,9 +60,7 @@ public class Main {
         }
 
         @Override
-        public Iterable<Integer> invoke(List<Double> input) {
-            return null;
-        }
+        public void invoke() {}
 
         @Override
         public List<Double> consolidateSingle(List<Double>... values) {
@@ -76,6 +81,11 @@ public class Main {
         public Iterable<Integer> splitCollection(int count) {
             return null;
         }
+
+        @Override
+        public int internalCollectionSize() {
+            return 0;
+        }
     }
 
     private static class TaskC extends Task<Double, Iterable<Double>, Collection<Integer>, Collection<Integer>> {
@@ -85,9 +95,7 @@ public class Main {
         }
 
         @Override
-        public Collection<Integer> invoke(Iterable<Double> input) {
-            return null;
-        }
+        public void invoke() {}
 
         @Override
         public Collection<Double> consolidateSingle(Double... values) {
@@ -108,6 +116,11 @@ public class Main {
         public Collection<Integer> splitCollection(int count) {
             return null;
         }
+
+        @Override
+        public int internalCollectionSize() {
+            return 0;
+        }
     }
 
     @SchedulingBehaviour(
@@ -121,9 +134,7 @@ public class Main {
         }
 
         @Override
-        public Void invoke(Iterable<Integer> input) {
-            return null;
-        }
+        public void invoke() {}
 
         @Override
         public Iterable<Integer> consolidateSingle(Integer... values) {
@@ -144,6 +155,11 @@ public class Main {
         public Void splitCollection(int count) {
             return null;
         }
+
+        @Override
+        public int internalCollectionSize() {
+            return 0;
+        }
     }
 
     private static final class TestTask<IS,IC,OC,OS> extends Task<IS,IC,OC,OS> {
@@ -153,9 +169,7 @@ public class Main {
         }
 
         @Override
-        public OC invoke(IC input) {
-            return null;
-        }
+        public void invoke() {}
 
         @Override
         public IC consolidateSingle(IS... values) {
@@ -175,6 +189,11 @@ public class Main {
         @Override
         public OC splitCollection(int count) {
             return null;
+        }
+
+        @Override
+        public int internalCollectionSize() {
+            return 0;
         }
     }
 
@@ -201,7 +220,26 @@ public class Main {
                 2,
                 10
         );
-        warpInterleavedScheduler.submit(mesh);
+        final ResourceFactory<? extends AllocatableResource> resourceFactory = new ResourceFactory<>() {
+            @Override
+            public AllocatableResource provision() throws Exception {
+                return null;
+            }
+
+            @Override
+            public Iterable<AllocatableResource> provision(int count) throws Exception {
+                return null;
+            }
+        };
+        final Allocator allocator = (final ResourceFactory<? extends AllocatableResource> rf, final Task<?,?,?,?> task) -> {return null;};
+        final Executor executor = new Executor(
+                warpInterleavedScheduler,
+                resourceFactory,
+                allocator,
+                1
+        );
+        executor.submit(mesh);
+        executor.run();
     }
 
 }
