@@ -15,4 +15,10 @@ public interface Splittable<OS, OC> {
      */
     OC splitCollection(final int count);
 
+    /**
+     * Provide total size of internal collection storing task results
+     * @return Collection size
+     */
+    int internalCollectionSize();
+
 }

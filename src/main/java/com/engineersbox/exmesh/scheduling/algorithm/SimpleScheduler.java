@@ -4,25 +4,17 @@ import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
-import com.engineersbox.exmesh.scheduling.allocation.Allocator;
+import org.eclipse.collections.api.RichIterable;
+import org.eclipse.collections.api.factory.Lists;
 import org.jctools.queues.SpscLinkedQueue;
 import org.jgrapht.traverse.BreadthFirstIterator;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 public class SimpleScheduler extends Scheduler {
 
     private final SpscLinkedQueue<Task<?,?,?,?>> queue;
 
-    public SimpleScheduler(final Allocator allocator) {
-        super(allocator);
+    public SimpleScheduler() {
         this.queue = new SpscLinkedQueue<>();
-    }
-
-    @Override
-    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
-        tasks.forEach(this.queue::offer);
     }
 
     @Override
@@ -42,10 +34,8 @@ public class SimpleScheduler extends Scheduler {
     }
 
     @Override
-    public void issue() {
+    public RichIterable<Task<?,?,?,?>> issue() {
         final Task<?,?,?,?> task = this.queue.poll();
-        if (task != null) {
-            super.allocator.allocate(task);
-        }
+        return task == null ? Lists.fixedSize.of() : Lists.immutable.of(task);
     }
 }

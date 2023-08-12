@@ -4,10 +4,9 @@ import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
+import org.eclipse.collections.api.RichIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
 
 public class WarpInterleavedScheduler extends Scheduler {
 
@@ -19,15 +18,9 @@ public class WarpInterleavedScheduler extends Scheduler {
     public WarpInterleavedScheduler(final int nodeCount,
                                     final int containerCount,
                                     final int stackSize) {
-        super(null);
         // Grid has a single bitmask of size nodeCount
         // Each node has a bitmask of size containerCount
         this.ebdu = new ExecutionBehaviourDecisionUnit(nodeCount, containerCount, stackSize);
-    }
-
-    @Override
-    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
-
     }
 
     @Override
@@ -46,7 +39,7 @@ public class WarpInterleavedScheduler extends Scheduler {
     }
 
     @Override
-    public void issue() {
+    public RichIterable<Task<?,?,?,?>> issue() {
         // 1. Get next waiting tasks in mesh
         // 2. Group tasks into nodes based on common parents and dependency
         // 3. Issue task groups to EBDU
@@ -54,6 +47,7 @@ public class WarpInterleavedScheduler extends Scheduler {
         // 5. Allocate containers to tasks masked in
         // 6. Mark tasks with active mask (1s in bitmask) as executing
         // 7. Reject non-masked in tasks
+        return null;
     }
 
 }

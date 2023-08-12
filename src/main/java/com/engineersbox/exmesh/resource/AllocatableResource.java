@@ -3,9 +3,10 @@ package com.engineersbox.exmesh.resource;
 import com.engineersbox.exmesh.execution.ExecutionResult;
 import com.engineersbox.exmesh.execution.Task;
 
+import java.util.concurrent.Future;
 import java.util.function.Function;
 
-public interface AllocatableResource extends Function<Task<?,?,?,?>, ExecutionResult> {
+public interface AllocatableResource extends Function<Task<?,?,?,?>, Future<ExecutionResult>> {
 
     /**
      * Invoked during initial allocation
@@ -23,7 +24,7 @@ public interface AllocatableResource extends Function<Task<?,?,?,?>, ExecutionRe
      * @return result of the execution of the task
      */
     @Override
-    ExecutionResult apply(final Task task);
+    Future<ExecutionResult> apply(final Task<?,?,?,?> task);
 
     /**
      * Invoked after task has been run on it

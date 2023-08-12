@@ -3,16 +3,18 @@ package com.engineersbox.exmesh.scheduling.allocation;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.resource.AllocatableResource;
+import com.engineersbox.exmesh.resource.ResourceFactory;
 
+@FunctionalInterface
 public interface Allocator {
 
     /**
-     * Allocate resources to mesh nodes according to colouring and topological sorting.
-     * @param mesh Mesh instance to reference
-     * @param <E> Edge type
+     * Allocate resource to task
+     * @param resourceFactory Provider to provision a resource instance
+     * @param task Instance of task to be executed under resource
      */
-    <E extends Pipe> void allocate(final Mesh<E> mesh);
-
-    void allocate(final Task<?,?,?,?> task);
+    AllocatableResource allocate(final ResourceFactory<? extends AllocatableResource> resourceFactory,
+                                 final Task<?, ?, ?, ?> task);
 
 }

@@ -13,9 +13,15 @@ public class ExecutionResult {
     }
 
     public enum State {
+        PENDING,
+        RUNNING,
         SUCCEEDED,
         FAILED,
-        ABORTED
+        ABORTED;
+
+        public boolean isFinished() {
+            return ordinal() > 1;
+        }
     }
 
 }

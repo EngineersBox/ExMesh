@@ -2,9 +2,14 @@ package com.engineersbox.exmesh.execution;
 
 import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
 import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviourImpl;
+import com.engineersbox.exmesh.execution.policy.PipeInterfacingPolicy;
+import com.engineersbox.exmesh.execution.policy.ResultBatchPusher;
+import com.engineersbox.exmesh.execution.policy.ResultBatchRetriever;
 import com.engineersbox.exmesh.execution.type.Compatibility;
 import com.engineersbox.exmesh.execution.type.Consolidatable;
 import com.engineersbox.exmesh.execution.type.Splittable;
+import com.engineersbox.exmesh.graph.Mesh;
+import com.engineersbox.exmesh.graph.Pipe;
 import com.google.common.collect.Streams;
 import com.google.common.reflect.TypeToken;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -78,11 +83,16 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     private Compatibility<IC> inputCollectionCompat;
     private final String name;
     private final double weight;
+    private TaskState state;
+    private Mesh<? extends Pipe> parent;
+    private PipeInterfacingPolicy ingressPolicy;
+    private PipeInterfacingPolicy egressPolicy;
 
     protected Task(final String name,
                    final double weight) {
         this.name = name;
         this.weight = weight;
+        this.state = TaskState.CREATED;
         this.inputSingleType = new TypeToken<IS>(getClass()){};
         this.inputCollectionType = new TypeToken<IC>(getClass()){};
         this.outputCollectionType = new TypeToken<OC>(getClass()){};
@@ -90,6 +100,8 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
         final MutableInt failCount = new MutableInt();
         this.inputSingleCompat = new Compatibility.Default<>(failCount, 4, true);
         this.inputCollectionCompat = new Compatibility.Default<>(failCount, 4, true);
+        this.ingressPolicy = new ResultBatchRetriever();
+        this.egressPolicy = new ResultBatchPusher();
         checkImplementationConcrete();
         LOGGER.trace(
                 "Created task {} | Weight {} | Input types [SINGLE: {}] [COLLECTION: {}] | Output types [SINGLE: {}] [COLLECTION: {}]",
@@ -179,12 +191,14 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
         return this.weight;
     }
 
+    void transitionState() {
+        this.state = this.state.transition();
+    }
+
     /**
      * Perform the actual task on the consolidated inputs into an output collection or singleton
-     * @param input Consolidated inputs from previous task(s)
-     * @return Singleton or collection of output(s)
      */
-    public abstract OC invoke(final IC input);
+    public abstract void invoke();
 
     /**
      * @see Consolidatable#consolidateSingle(Object[])
@@ -211,6 +225,12 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
     public abstract OC splitCollection(int count);
 
     /**
+     * @see Splittable#internalCollectionSize()
+     */
+    @Override
+    public abstract int internalCollectionSize();
+
+    /**
      * Programmatically provide an instance of {@link SchedulingBehaviour} for use in scheduling task.
      * By default, this will check for an annotation present on the class first, returning it if found.
      * Otherwise, it will return a default configuration as defined by {@link SchedulingBehaviourImpl#ofDefault()}.
@@ -222,6 +242,33 @@ public abstract class Task<IS, IC, OC, OS> implements Splittable<OS, OC>, Consol
                 annotation,
                 SchedulingBehaviourImpl::ofDefault
         );
+    }
+
+    public Mesh<? extends Pipe> getParent() {
+        return this.parent;
+    }
+
+    public Task<IS, IC, OC, OS> setParent(final Mesh<? extends Pipe> parent) {
+        this.parent = parent;
+        return this;
+    }
+
+    public PipeInterfacingPolicy getIngressPolicy() {
+        return this.ingressPolicy;
+    }
+
+    public Task<IS, IC, OC, OS> setIngressPolicy(final PipeInterfacingPolicy ingressPolicy) {
+        this.ingressPolicy = ingressPolicy;
+        return this;
+    }
+
+    public PipeInterfacingPolicy getEgressPolicy() {
+        return this.egressPolicy;
+    }
+
+    public Task<IS, IC, OC, OS> setEgressPolicy(final PipeInterfacingPolicy egressPolicy) {
+        this.egressPolicy = egressPolicy;
+        return this;
     }
 
     @Override

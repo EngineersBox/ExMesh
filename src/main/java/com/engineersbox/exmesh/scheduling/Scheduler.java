@@ -3,23 +3,9 @@ package com.engineersbox.exmesh.scheduling;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
-import com.engineersbox.exmesh.scheduling.allocation.Allocator;
-
-import java.util.Collection;
+import org.eclipse.collections.api.RichIterable;
 
 public abstract class Scheduler {
-
-    protected final Allocator allocator;
-
-    protected Scheduler(final Allocator allocator) {
-        this.allocator = allocator;
-    }
-
-    /**
-     * Submit a set of tasks to be scheduled.
-     * @param tasks Task set
-     */
-    public abstract void submit(final Collection<Task<?,?,?,?>> tasks);
 
     /**
      * Submit a mesh of tasks to schedule.
@@ -29,7 +15,7 @@ public abstract class Scheduler {
 
     /**
      * Determine the candidacy of tasks ready to be issued
-     * and prioritse them based on scheduler criteria/behaviour.
+     * and prioritise them based on scheduler criteria/behaviour.
      */
     public abstract void analyse();
 
@@ -42,6 +28,12 @@ public abstract class Scheduler {
     /**
      * Issue next batch of tasks to resources with execution context.
      */
-    public abstract void issue();
+    public abstract RichIterable<Task<?,?,?,?>> issue();
+
+    public RichIterable<Task<?,?,?,?>> executeIteration() {
+        this.analyse();
+        this.mark();
+        return this.issue();
+    }
 
 }

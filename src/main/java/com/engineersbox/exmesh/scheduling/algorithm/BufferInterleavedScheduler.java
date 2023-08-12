@@ -5,6 +5,7 @@ import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
+import org.eclipse.collections.api.RichIterable;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
 
@@ -18,21 +19,14 @@ public class BufferInterleavedScheduler extends Scheduler {
     private final int bufferCount;
     private final int bufferSize;
 
-    protected BufferInterleavedScheduler(final Allocator allocator,
-                                         final int bufferCount,
+    protected BufferInterleavedScheduler(final int bufferCount,
                                          final int bufferSize) {
-        super(allocator);
         this.buffers = Lists.immutable.fromStream(
                 IntStream.range(0, bufferCount)
                         .mapToObj(_ignored -> new ArrayDeque<>(bufferSize))
         );
         this.bufferCount = bufferCount;
         this.bufferSize = bufferSize;
-    }
-
-    @Override
-    public void submit(final Collection<Task<?, ?, ?, ?>> tasks) {
-
     }
 
     @Override
@@ -51,7 +45,7 @@ public class BufferInterleavedScheduler extends Scheduler {
     }
 
     @Override
-    public void issue() {
-
+    public RichIterable<Task<?,?,?,?>> issue() {
+        return null;
     }
 }
