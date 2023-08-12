@@ -1,8 +1,9 @@
-package com.engineersbox.exmesh.scheduling;
+package com.engineersbox.exmesh.scheduling.algorithm;
 
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.scheduling.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

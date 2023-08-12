@@ -7,7 +7,7 @@ import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.scheduling.Scheduler;
-import com.engineersbox.exmesh.scheduling.WarpInterleavedScheduler;
+import com.engineersbox.exmesh.scheduling.algorithm.WarpInterleavedScheduler;
 
 import java.util.Collection;
 import java.util.List;

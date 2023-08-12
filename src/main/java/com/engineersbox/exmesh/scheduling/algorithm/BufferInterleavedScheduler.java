@@ -1,8 +1,9 @@
-package com.engineersbox.exmesh.scheduling;
+package com.engineersbox.exmesh.scheduling.algorithm;
 
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
+import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;

@@ -1,4 +1,4 @@
-package com.engineersbox.exmesh.scheduling;
+package com.engineersbox.exmesh.scheduling.algorithm;
 
 import com.engineersbox.exmesh.util.FixedSizeStack;
 import org.apache.commons.lang3.BitField;
