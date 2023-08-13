@@ -14,15 +14,22 @@ import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.algorithm.SimpleScheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang3.mutable.MutableInt;
 import org.eclipse.collections.api.factory.Lists;
+import org.jgrapht.alg.clustering.GirvanNewmanClustering;
+import org.jgrapht.alg.clustering.KSpanningTreeClustering;
+import org.jgrapht.alg.color.BrownBacktrackColoring;
+import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -294,6 +301,26 @@ public class Main {
         );
         executor.submit(mesh);
         executor.run();
+
+        final BrownBacktrackColoring<Task<?,?,?,?>,? extends Pipe> coloring = new BrownBacktrackColoring<>(mesh);
+        coloring.getColoring().getColors().forEach((final Task<?,?,?,?> task, final Integer color) -> LOGGER.info(
+                "Task: {} | Color: {}",
+                task.getName(),
+                color
+        ));
+        final GirvanNewmanClustering<Task<?,?,?,?>, ? extends Pipe> clustering = new GirvanNewmanClustering<>(mesh, 3);
+        final MutableInt count = new MutableInt(0);
+        clustering.getClustering()
+                .forEach((final Set<Task<?,?,?,?>> cluster) -> {
+                    LOGGER.info(
+                            "Cluster {} | Size: {} | Elements: [{}]",
+                            count.getAndIncrement(),
+                            cluster.size(),
+                            cluster.stream()
+                                    .map(Task::getName)
+                                    .collect(Collectors.joining(","))
+                    );
+                });
     }
 
 }
