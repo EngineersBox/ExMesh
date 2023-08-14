@@ -370,7 +370,7 @@ public class Main {
                 task.getName(),
                 color
         ));
-        final GirvanNewmanClustering<Task<?,?,?,?>, ? extends Pipe> clustering = new GirvanNewmanClustering<>(mesh, 4);
+        final GirvanNewmanClustering<Task<?,?,?,?>, ? extends Pipe> clustering = new GirvanNewmanClustering<>(mesh, 6);
         final MutableInt count = new MutableInt(0);
         clustering.getClustering()
                 .forEach((final Set<Task<?,?,?,?>> cluster) -> {
