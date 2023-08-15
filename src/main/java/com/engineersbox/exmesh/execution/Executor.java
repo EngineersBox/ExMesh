@@ -6,6 +6,8 @@ import com.engineersbox.exmesh.resource.AllocatableResource;
 import com.engineersbox.exmesh.resource.ResourceFactory;
 import com.engineersbox.exmesh.scheduling.Scheduler;
 import com.engineersbox.exmesh.scheduling.allocation.Allocator;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.IterableUtils;
 import org.eclipse.collections.api.RichIterable;
 import org.jctools.queues.SpscArrayQueue;
 import org.jctools.queues.atomic.SpscAtomicArrayQueue;
@@ -103,7 +105,7 @@ public class Executor implements Runnable {
     @Override
     public void run() {
         RichIterable<Task<?,?,?,?>> tasks;
-        while ((tasks = this.scheduler.executeIteration()) != null && !tasks.isEmpty()) {
+        while (!IterableUtils.isEmpty(tasks = this.scheduler.executeIteration())) {
             /* 1. Run scheduler iteration (analyse, mark, issue)
              * 2. Allocate resources to issued tasks (if allocation condition is met)
              * 3. Configure resources for tasks
