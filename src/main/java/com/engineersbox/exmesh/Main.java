@@ -4,8 +4,8 @@ import com.engineersbox.exmesh.execution.ExecutionResult;
 import com.engineersbox.exmesh.execution.Executor;
 import com.engineersbox.exmesh.execution.Task;
 import com.engineersbox.exmesh.execution.dependency.AllocationStrategy;
-import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
 import com.engineersbox.exmesh.execution.dependency.ExecutionCondition;
+import com.engineersbox.exmesh.execution.dependency.SchedulingBehaviour;
 import com.engineersbox.exmesh.graph.Mesh;
 import com.engineersbox.exmesh.graph.Pipe;
 import com.engineersbox.exmesh.resource.AllocatableResource;
@@ -17,9 +17,7 @@ import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.eclipse.collections.api.factory.Lists;
 import org.jgrapht.alg.clustering.GirvanNewmanClustering;
-import org.jgrapht.alg.clustering.KSpanningTreeClustering;
 import org.jgrapht.alg.color.BrownBacktrackColoring;
-import org.jgrapht.alg.color.ColorRefinementAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -370,7 +368,7 @@ public class Main {
                 task.getName(),
                 color
         ));
-        final GirvanNewmanClustering<Task<?,?,?,?>, ? extends Pipe> clustering = new GirvanNewmanClustering<>(mesh, 6);
+        final GirvanNewmanClustering<Task<?,?,?,?>, ? extends Pipe> clustering = new GirvanNewmanClustering<>(mesh, 4);
         final MutableInt count = new MutableInt(0);
         clustering.getClustering()
                 .forEach((final Set<Task<?,?,?,?>> cluster) -> {
