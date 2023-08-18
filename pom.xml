@@ -38,6 +38,7 @@
         <eclipse-collections.version>11.1.0</eclipse-collections.version>
         <jgrapht.version>1.5.2</jgrapht.version>
         <jctools.version>4.0.1</jctools.version>
+        <typetools.version>0.6.3</typetools.version>
 
         <!-- Maven -->
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
@@ -57,9 +58,14 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
-	<dependencies>
+    <dependencies>
+        <!-- Type Tools -->
+        <dependency>
+            <groupId>net.jodah</groupId>
+            <artifactId>typetools</artifactId>
+            <version>${typetools.version}</version>
+        </dependency>
         <!-- JCTools -->
-
         <dependency>
             <groupId>org.jctools</groupId>
             <artifactId>jctools-core</artifactId>
