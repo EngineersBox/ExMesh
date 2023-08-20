@@ -39,6 +39,7 @@
         <jgrapht.version>1.5.2</jgrapht.version>
         <jctools.version>4.0.1</jctools.version>
         <typetools.version>0.6.3</typetools.version>
+        <easy-batch.version>7.0.2</easy-batch.version>
 
         <!-- Maven -->
         <maven-compiler-plugin.version>3.9.0</maven-compiler-plugin.version>
@@ -59,6 +60,17 @@
     </properties>
 
     <dependencies>
+        <!-- EasyBatch -->
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-batch-core</artifactId>
+            <version>${easy-batch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jeasy</groupId>
+            <artifactId>easy-batch-extensions</artifactId>
+            <version>${easy-batch.version}</version>
+        </dependency>
         <!-- Type Tools -->
         <dependency>
             <groupId>net.jodah</groupId>
